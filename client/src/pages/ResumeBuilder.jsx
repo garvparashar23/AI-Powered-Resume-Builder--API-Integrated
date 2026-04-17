@@ -5,12 +5,14 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { updateField, setResumeData } from '../store/resumeSlice';
 import html2pdf from 'html2pdf.js';
-import { ArrowLeft, Save, Download, User, BookOpen, Briefcase, Settings, Target } from 'lucide-react';
+import { ArrowLeft, Save, Download, User, BookOpen, Briefcase, FolderGit2, Settings, Target } from 'lucide-react';
+import { API_URL } from '../config';
 
 /* Step Components */
 import PersonalInfo from '../components/FormSteps/PersonalInfo';
 import Education from '../components/FormSteps/Education';
 import Experience from '../components/FormSteps/Experience';
+import Projects from '../components/FormSteps/Projects';
 import Skills from '../components/FormSteps/Skills';
 import SummaryGenerator from '../components/FormSteps/SummaryGenerator';
 
@@ -30,19 +32,33 @@ export default function ResumeBuilder() {
     { id: 1, name: 'Personal', icon: <User size={18} /> },
     { id: 2, name: 'Education', icon: <BookOpen size={18} /> },
     { id: 3, name: 'Experience', icon: <Briefcase size={18} /> },
-    { id: 4, name: 'Skills', icon: <Settings size={18} /> },
-    { id: 5, name: 'Summary', icon: <Target size={18} /> },
+    { id: 4, name: 'Projects', icon: <FolderGit2 size={18} /> },
+    { id: 5, name: 'Skills', icon: <Settings size={18} /> },
+    { id: 6, name: 'Summary', icon: <Target size={18} /> },
   ];
 
   const handleSave = async () => {
     setSaving(true);
     try {
-      const res = await axios.post('http://localhost:5000/api/resume/save', currentResume, {
-        headers: { Authorization: `Bearer ${user?.token || ''}` }
-      });
-      if (res.data.success) {
-        toast.success(res.data.message || 'Resume saved successfully!');
+      let res;
+      if (currentResume._id) {
+        // Update existing resume
+        res = await axios.put(`${API_URL}/resumes/${currentResume._id}`, currentResume, {
+          headers: { Authorization: `Bearer ${user?.token || ''}` }
+        });
+      } else {
+        // Create new resume
+        res = await axios.post(`${API_URL}/resumes`, currentResume, {
+          headers: { Authorization: `Bearer ${user?.token || ''}` }
+        });
+        // Update local state with the saved DB item (which contains _id)
+        if (res.data && res.data._id) {
+          dispatch(setResumeData(res.data));
+          // Optionally dynamically update the URL so a refresh keeps it to the same ID
+          navigate(`/builder/${res.data._id}`, { replace: true });
+        }
       }
+      toast.success('Resume saved successfully!');
     } catch (error) {
       toast.error('Failed to save resume');
     } finally {
@@ -104,8 +120,9 @@ export default function ResumeBuilder() {
             {activeStep === 1 && <PersonalInfo />}
             {activeStep === 2 && <Education />}
             {activeStep === 3 && <Experience />}
-            {activeStep === 4 && <Skills />}
-            {activeStep === 5 && <SummaryGenerator />}
+            {activeStep === 4 && <Projects />}
+            {activeStep === 5 && <Skills />}
+            {activeStep === 6 && <SummaryGenerator />}
           </div>
         </div>
 

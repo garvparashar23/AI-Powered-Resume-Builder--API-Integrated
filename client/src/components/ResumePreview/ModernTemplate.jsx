@@ -38,6 +38,25 @@ export default function ModernTemplate({ data }) {
               </div>
             </section>
           )}
+
+          {data?.projects?.length > 0 && (
+            <section>
+              <h2 className="text-xl font-bold text-blue-800 uppercase tracking-widest mb-4 flex items-center gap-2">
+                <span className="w-8 h-[2px] bg-blue-800 inline-block"></span> Projects
+              </h2>
+              <div className="space-y-5">
+                {data.projects.map((proj, i) => (
+                  <div key={i}>
+                    <div className="flex justify-between items-baseline mb-1">
+                      <h3 className="font-bold text-gray-900 text-lg">{proj.title}</h3>
+                      <span className="text-sm font-semibold text-blue-600 whitespace-nowrap">{proj.link}</span>
+                    </div>
+                    <p className="text-sm text-gray-700 text-justify">{proj.description}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
         </div>
 
         <div className="col-span-1 space-y-8 pl-6 border-l border-gray-200">

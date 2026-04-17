@@ -4,6 +4,7 @@ import { updateField } from '../../store/resumeSlice';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { Wand2 } from 'lucide-react';
+import { API_URL } from '../../config';
 
 export default function SummaryGenerator() {
   const { summary, skills, experience, education } = useSelector((state) => state.resume.currentResume);
@@ -21,7 +22,7 @@ export default function SummaryGenerator() {
     try {
 
       const res = await axios.post(
-        'http://localhost:5000/api/ai/generate-summary',
+        `${API_URL}/ai/generate-summary`,
         { 
           role,
           skills,

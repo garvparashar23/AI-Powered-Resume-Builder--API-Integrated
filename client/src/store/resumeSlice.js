@@ -7,10 +7,11 @@ const initialState = {
     skills: [],
     education: [],
     experience: [],
+    projects: [],
     summary: '',
     templateId: 'modern',
   },
-  currentStep: 1, // 1: Personal, 2: Education, 3: Experience, 4: Skills, 5: Summary
+  currentStep: 1, // 1: Personal, 2: Education, 3: Experience, 4: Projects, 5: Skills, 6: Summary
 };
 
 const resumeSlice = createSlice({

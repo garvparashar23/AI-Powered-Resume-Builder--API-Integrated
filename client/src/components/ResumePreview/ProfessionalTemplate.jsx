@@ -39,6 +39,25 @@ export default function ProfessionalTemplate({ data }) {
         </section>
       )}
 
+      {data?.projects?.length > 0 && (
+        <section className="mb-6">
+          <h2 className="text-lg font-bold border-b-2 border-slate-800 uppercase tracking-widest mb-4 pb-1">
+            Projects
+          </h2>
+          <div className="space-y-5">
+            {data.projects.map((proj, i) => (
+              <div key={i}>
+                <div className="flex justify-between items-baseline">
+                  <h3 className="font-bold text-base">{proj.title}</h3>
+                  <span className="text-sm italic">{proj.link}</span>
+                </div>
+                <p className="text-sm leading-relaxed text-justify mt-1">{proj.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
       {data?.education?.length > 0 && (
         <section className="mb-6">
           <h2 className="text-lg font-bold border-b-2 border-slate-800 uppercase tracking-widest mb-4 pb-1">

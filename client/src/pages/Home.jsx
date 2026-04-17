@@ -9,9 +9,10 @@ export default function Home() {
            <FileText className="text-primary w-8 h-8" />
            <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-700">AI Resume</span>
         </div>
-        <div className="space-x-4">
+        <div className="space-x-6">
+          <Link to="/about" className="text-gray-600 hover:text-primary font-medium transition-colors">About Project</Link>
           <Link to="/login" className="text-gray-600 hover:text-primary font-medium transition-colors">Login</Link>
-          <Link to="/register" className="bg-primary text-white px-6 py-2 rounded-full shadow-md hover:bg-blue-600 transition-all hover:shadow-lg">Get Started</Link>
+          <Link to="/register" className="bg-primary text-white px-6 py-2 rounded-full shadow-md hover:bg-blue-600 transition-all hover:shadow-lg inline-block">Get Started</Link>
         </div>
       </nav>
 

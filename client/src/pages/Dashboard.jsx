@@ -6,6 +6,7 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { logout } from '../store/authSlice';
 import { resetResume, setResumeData } from '../store/resumeSlice';
+import { API_URL } from '../config';
 
 export default function Dashboard() {
   const [resumes, setResumes] = useState([]);
@@ -20,7 +21,7 @@ export default function Dashboard() {
 
   const fetchResumes = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/resumes', {
+      const res = await axios.get(`${API_URL}/resumes`, {
         headers: { Authorization: `Bearer ${user.token}` }
       });
       setResumes(res.data);
@@ -49,7 +50,7 @@ export default function Dashboard() {
   const deleteResume = async (id) => {
     if (!window.confirm('Are you sure you want to delete this resume?')) return;
     try {
-      await axios.delete(`http://localhost:5000/api/resumes/${id}`, {
+      await axios.delete(`${API_URL}/resumes/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` }
       });
       setResumes(resumes.filter(r => r._id !== id));

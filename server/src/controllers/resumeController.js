@@ -39,7 +39,7 @@ const getResumeById = async (req, res) => {
 // @access  Private
 const createResume = async (req, res) => {
   try {
-    const { name, email, skills, education, experience, summary, templateId, status } = req.body;
+    const { name, email, skills, education, experience, projects, summary, templateId, status } = req.body;
 
     const resume = new Resume({
       userId: req.user._id,
@@ -48,6 +48,7 @@ const createResume = async (req, res) => {
       skills,
       education,
       experience,
+      projects,
       summary,
       templateId,
       status

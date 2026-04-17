@@ -38,6 +38,25 @@ export default function MinimalTemplate({ data }) {
           </section>
         )}
 
+        {data?.projects?.length > 0 && (
+          <section>
+            <h2 className="text-sm font-bold text-gray-400 uppercase tracking-widest border-b border-gray-200 pb-2 mb-6 mt-8">
+              Projects
+            </h2>
+            <div className="space-y-6">
+              {data.projects.map((proj, i) => (
+                <div key={i} className="pl-4 border-l-2 border-gray-200">
+                  <div className="flex justify-between items-baseline mb-1">
+                    <h3 className="font-semibold text-gray-800 text-base">{proj.title}</h3>
+                    <span className="text-xs text-gray-400 tracking-wider lowercase">{proj.link}</span>
+                  </div>
+                  <p className="text-sm text-gray-600 leading-relaxed mt-2">{proj.description}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
         {data?.education?.length > 0 && (
           <section>
             <h2 className="text-sm font-bold text-gray-400 uppercase tracking-widest border-b border-gray-200 pb-2 mb-6 mt-8">

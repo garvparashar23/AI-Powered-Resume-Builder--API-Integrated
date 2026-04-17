@@ -13,6 +13,12 @@ const experienceSchema = new mongoose.Schema({
   description: String,
 });
 
+const projectSchema = new mongoose.Schema({
+  title: String,
+  link: String,
+  description: String,
+});
+
 const resumeSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   name: { type: String, default: '' },
@@ -20,6 +26,7 @@ const resumeSchema = new mongoose.Schema({
   skills: { type: [String], default: [] },
   education: { type: [educationSchema], default: [] },
   experience: { type: [experienceSchema], default: [] },
+  projects: { type: [projectSchema], default: [] },
   summary: { type: String, default: '' },
   status: { type: String, enum: ['draft', 'completed'], default: 'draft' },
   templateId: { type: String, default: 'modern' }
