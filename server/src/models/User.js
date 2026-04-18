@@ -5,6 +5,14 @@ const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  // Phase 1: Pro Features
+  role: { type: String, enum: ['user', 'admin', 'recruiter'], default: 'user' },
+  plan: { type: String, enum: ['free', 'pro'], default: 'free' },
+  tokensUsed: { type: Number, default: 0 },
+  preferences: {
+    targetTone: { type: String, enum: ['corporate', 'startup', 'research', 'modern'], default: 'modern' },
+    targetRoles: { type: [String], default: [] }
+  },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
 }, { timestamps: true });

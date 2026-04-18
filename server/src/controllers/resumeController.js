@@ -110,4 +110,18 @@ const deleteResume = async (req, res) => {
   }
 };
 
-module.exports = { getResumes, getResumeById, createResume, updateResume, deleteResume };
+const getPublicResume = async (req, res) => {
+  try {
+    const resume = await Resume.findById(req.params.id).select('-userId -analytics');
+
+    if (resume && resume.isPublic) {
+      res.json(resume);
+    } else {
+      res.status(404).json({ message: 'Resume is either private or not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving public resume' });
+  }
+};
+
+module.exports = { getResumes, getResumeById, createResume, updateResume, deleteResume, getPublicResume };

@@ -5,7 +5,7 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { updateField, setResumeData } from '../store/resumeSlice';
 import html2pdf from 'html2pdf.js';
-import { ArrowLeft, Save, Download, User, BookOpen, Briefcase, FolderGit2, Settings, Target } from 'lucide-react';
+import { ArrowLeft, Save, Download, User, BookOpen, Briefcase, FolderGit2, Settings, Target, Video, MessageSquare, Share2, Globe } from 'lucide-react';
 import { API_URL } from '../config';
 
 /* Step Components */
@@ -18,6 +18,9 @@ import SummaryGenerator from '../components/FormSteps/SummaryGenerator';
 
 /* Preview Component */
 import PreviewManager from '../components/ResumePreview/PreviewManager';
+import AtsScoreModal from '../components/ResumePreview/AtsScoreModal';
+import VideoScriptModal from '../components/ResumePreview/VideoScriptModal';
+import InterviewPrepModal from '../components/ResumePreview/InterviewPrepModal';
 
 export default function ResumeBuilder() {
   const { currentResume, currentStep } = useSelector((state) => state.resume);
@@ -25,8 +28,13 @@ export default function ResumeBuilder() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
-  const [saving, setSaving] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [activeStep, setActiveStep] = useState(1);
+  const [isAtsModalOpen, setIsAtsModalOpen] = useState(false);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+  const [isInterviewModalOpen, setIsInterviewModalOpen] = useState(false);
+  const [atsLoading, setAtsLoading] = useState(false);
+  const [atsData, setAtsData] = useState(null);
 
   const steps = [
     { id: 1, name: 'Personal', icon: <User size={18} /> },
@@ -38,31 +46,23 @@ export default function ResumeBuilder() {
   ];
 
   const handleSave = async () => {
-    setSaving(true);
+    setIsSaving(true);
     try {
-      let res;
-      if (currentResume._id) {
-        // Update existing resume
-        res = await axios.put(`${API_URL}/resumes/${currentResume._id}`, currentResume, {
-          headers: { Authorization: `Bearer ${user?.token || ''}` }
-        });
-      } else {
-        // Create new resume
-        res = await axios.post(`${API_URL}/resumes`, currentResume, {
-          headers: { Authorization: `Bearer ${user?.token || ''}` }
-        });
-        // Update local state with the saved DB item (which contains _id)
-        if (res.data && res.data._id) {
-          dispatch(setResumeData(res.data));
-          // Optionally dynamically update the URL so a refresh keeps it to the same ID
-          navigate(`/builder/${res.data._id}`, { replace: true });
-        }
-      }
+      const endpoint = id ? `${API_URL}/resumes/${id}` : `${API_URL}/resumes`;
+      const method = id ? 'put' : 'post';
+      
+      const res = await axios[method](endpoint, currentResume, {
+        headers: { Authorization: `Bearer ${user?.token || ''}` }
+      });
+      
       toast.success('Resume saved successfully!');
+      if (!id && res.data && res.data._id) {
+        navigate(`/builder/${res.data._id}`, { replace: true });
+      }
     } catch (error) {
       toast.error('Failed to save resume');
     } finally {
-      setSaving(false);
+      setIsSaving(false);
     }
   };
 
@@ -78,22 +78,58 @@ export default function ResumeBuilder() {
     html2pdf().set(opt).from(element).save();
   };
 
+  const toggleShare = () => {
+     if (!id) {
+        toast.error('Please save your resume first before sharing!');
+        return;
+     }
+     const newPublicState = !currentResume.isPublic;
+     dispatch(updateField({ field: 'isPublic', value: newPublicState }));
+     toast.success(newPublicState ? 'Resume is now Public!' : 'Resume is now Private');
+  };
+
+  const copyPublicLink = () => {
+     const link = `${window.location.origin}/p/${id}`;
+     navigator.clipboard.writeText(link);
+     toast.success('Public link copied to clipboard!');
+  };
+
   return (
     <div className="flex h-screen overflow-hidden bg-gray-50">
       {/* Left Sidebar Form */}
       <div className="w-full lg:w-[45%] xl:w-[40%] flex flex-col bg-white border-r border-gray-200 shadow-xl z-10">
         
-        {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-white">
+        <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-white flex-wrap gap-2">
           <button onClick={() => navigate('/dashboard')} className="p-2 hover:bg-gray-100 rounded-full transition text-gray-500">
             <ArrowLeft size={20} />
           </button>
-          <div className="flex gap-2">
-            <button onClick={handleSave} disabled={saving} className="flex gap-2 items-center px-4 py-2 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 rounded-lg font-medium transition">
-              <Save size={16} /> {saving ? 'Saving...' : 'Save'}
+          
+          <div className="flex items-center gap-2">
+             {currentResume.isPublic && id && (
+                <button onClick={copyPublicLink} className="flex gap-1 items-center px-3 py-1.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-lg text-xs font-bold border border-emerald-200 transition">
+                   <Globe size={14} /> Copy Link
+                </button>
+             )}
+             <button onClick={toggleShare} className={`flex gap-1 items-center px-3 py-1.5 rounded-lg text-xs font-bold border transition ${currentResume.isPublic ? 'bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100' : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'}`}>
+                <Share2 size={14} /> {currentResume.isPublic ? 'Shared' : 'Private'}
+             </button>
+          </div>
+
+          <div className="flex gap-2 ml-auto">
+            <button onClick={() => setIsAtsModalOpen(true)} className="flex gap-2 items-center px-4 py-2 bg-gradient-to-r from-indigo-50 to-purple-50 text-indigo-700 hover:from-indigo-100 hover:to-purple-100 rounded-lg font-medium transition border border-indigo-100 hidden xl:flex">
+              <Target size={16} /> Scan
+            </button>
+            <button onClick={() => setIsVideoModalOpen(true)} className="flex gap-2 items-center px-4 py-2 bg-gradient-to-r from-rose-50 to-orange-50 text-rose-700 hover:from-rose-100 hover:to-orange-100 rounded-lg font-medium transition border border-rose-100 hidden sm:flex">
+              <Video size={16} /> Pitch
+            </button>
+            <button onClick={() => setIsInterviewModalOpen(true)} className="flex gap-2 items-center px-4 py-2 bg-gradient-to-r from-blue-50 to-cyan-50 text-blue-700 hover:from-blue-100 hover:to-cyan-100 rounded-lg font-medium transition border border-blue-100 hidden md:flex">
+              <MessageSquare size={16} /> Prep
+            </button>
+            <button onClick={handleSave} disabled={isSaving} className="flex gap-2 items-center px-4 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-lg font-medium transition">
+              <Save size={16} /> {isSaving ? 'Saving...' : 'Save'}
             </button>
             <button onClick={handleDownload} className="flex gap-2 items-center px-4 py-2 bg-primary text-white hover:bg-blue-600 rounded-lg font-medium transition shadow-md shadow-blue-500/20">
-              <Download size={16} /> Export PDF
+              <Download size={16} /> PDF
             </button>
           </div>
         </div>
@@ -152,6 +188,19 @@ export default function ResumeBuilder() {
           </div>
         </div>
       </div>
+      
+      <AtsScoreModal 
+        isOpen={isAtsModalOpen} 
+        onClose={() => setIsAtsModalOpen(false)} 
+      />
+      <VideoScriptModal
+        isOpen={isVideoModalOpen} 
+        onClose={() => setIsVideoModalOpen(false)}
+      />
+      <InterviewPrepModal
+        isOpen={isInterviewModalOpen}
+        onClose={() => setIsInterviewModalOpen(false)}
+      />
     </div>
   );
 }

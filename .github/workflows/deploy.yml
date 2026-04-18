@@ -1,0 +1,45 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo:6.0
+        ports:
+          - 27017:27017
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18.x'
+
+    - name: Install Server Dependencies
+      run: cd server && npm ci
+
+    - name: Install Client Dependencies
+      run: cd client && npm ci
+
+    # In a real project, tests would be executed here
+    # - name: Run Server Tests
+    #   run: cd server && npm test
+    #   env:
+    #     MONGO_URI: mongodb://localhost:27017/testdb
+
+    - name: Build Client
+      run: cd client && npm run build
+      env:
+        VITE_API_URL: https://api.production.com/api
+
+    - name: Docker Build Validate
+      run: docker-compose build

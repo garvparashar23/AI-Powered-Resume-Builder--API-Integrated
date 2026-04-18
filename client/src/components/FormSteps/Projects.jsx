@@ -1,10 +1,17 @@
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateField } from '../../store/resumeSlice';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, Github } from 'lucide-react';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
+import { API_URL } from '../../config';
 
 export default function Projects() {
   const { projects } = useSelector((state) => state.resume.currentResume);
+  const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const [githubUser, setGithubUser] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleAdd = () => {
     dispatch(updateField({
@@ -24,16 +31,62 @@ export default function Projects() {
     dispatch(updateField({ field: 'projects', value: newProj }));
   };
 
+  const handleGithubImport = async () => {
+    if (!githubUser) {
+      toast.error('Please enter a GitHub username');
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await axios.post(`${API_URL}/ai/github-import`, { username: githubUser }, {
+        headers: { Authorization: `Bearer ${user?.token || ''}` }
+      });
+      const imported = res.data.projects || [];
+      if (imported.length > 0) {
+         dispatch(updateField({
+           field: 'projects',
+           value: [...(projects || []), ...imported]
+         }));
+         toast.success(`Imported ${imported.length} projects!`);
+         setGithubUser('');
+      } else {
+         toast.error('No public repositories found.');
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to import from GitHub');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-6 animate-fadeIn">
-      <div className="flex justify-between items-center bg-white sticky top-0 py-2 z-10">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white sticky top-0 py-2 z-10 gap-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-800">Projects</h2>
-          <p className="text-gray-500 text-sm mt-1">Add your key projects or portfolio items.</p>
+          <p className="text-gray-500 text-sm mt-1">Add your key projects or import from GitHub.</p>
         </div>
-        <button onClick={handleAdd} className="flex items-center gap-1 text-sm bg-indigo-50 text-primary px-3 py-1.5 rounded-lg font-medium hover:bg-indigo-100 transition">
-          <Plus size={16} /> Add
-        </button>
+        <div className="flex gap-2">
+           <div className="flex bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+             <input 
+               type="text" 
+               value={githubUser}
+               onChange={(e) => setGithubUser(e.target.value)}
+               placeholder="GitHub User..." 
+               className="px-3 py-1.5 text-sm bg-transparent outline-none w-32"
+             />
+             <button 
+               onClick={handleGithubImport}
+               disabled={loading}
+               className="bg-gray-800 text-white px-3 py-1.5 flex items-center gap-1 hover:bg-gray-700 disabled:opacity-50 transition text-sm font-medium"
+             >
+               <Github size={14} /> {loading ? '...' : 'Import'}
+             </button>
+           </div>
+           <button onClick={handleAdd} className="flex items-center gap-1 text-sm bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-lg font-medium hover:bg-indigo-100 transition border border-indigo-100">
+             <Plus size={16} /> Add 
+           </button>
+        </div>
       </div>
 
       <div className="space-y-6">
@@ -74,7 +127,7 @@ export default function Projects() {
                   value={proj.description}
                   onChange={(e) => handleChange(index, 'description', e.target.value)}
                   rows="3"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition bg-white resize-none"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition bg-white resize-none text-sm"
                   placeholder="Describe the tech stack and what you built..."
                 />
               </div>
@@ -83,7 +136,7 @@ export default function Projects() {
         ))}
         {(!projects || projects.length === 0) && (
           <div className="text-center py-10 bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl text-gray-500">
-            No project entries yet. Click Add to begin.
+            No project entries yet. Enter a GitHub username to quickly import your repositories.
           </div>
         )}
       </div>
