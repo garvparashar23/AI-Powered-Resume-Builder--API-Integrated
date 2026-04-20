@@ -1,37 +1,45 @@
 export default function MinimalTemplate({ data }) {
   return (
-    <div className="w-full h-full p-10 font-sans bg-white text-gray-800">
-      <div className="text-center mb-10">
-        <h1 className="text-3xl tracking-widest font-light text-gray-900 uppercase mb-2">
-          {data?.name || 'Your Name'}
-        </h1>
-        <p className="text-sm text-gray-500 tracking-wider">
-          {data?.email || 'email@example.com'}
+    <div className="w-full min-h-full p-16 font-sans bg-white text-gray-800">
+      <div className="text-center mb-16">
+        <div className="inline-block bg-gray-900 px-6 py-1.5 mb-6">
+           <h1 className="text-xs tracking-[0.3em] font-light text-white uppercase">
+             {data?.name || 'Your Name'}
+           </h1>
+        </div>
+        <p className="text-[11px] text-gray-500 tracking-[0.2em] uppercase font-medium flex justify-center gap-6">
+          <span>{data?.email || 'email@example.com'}</span>
+          {data?.phone && <span>{data.phone}</span>}
         </p>
+        <div className="w-full max-w-[200px] h-px bg-gray-200 mx-auto mt-8"></div>
       </div>
 
-      <div className="max-w-3xl mx-auto space-y-8">
+      <div className="max-w-2xl mx-auto space-y-16">
         {data?.summary && (
           <section className="text-center">
-            <p className="text-sm text-gray-600 leading-loose italic max-w-2xl mx-auto">
-              "{data.summary}"
+            <p className="text-[14px] text-gray-600 leading-loose mx-auto font-light">
+              {data.summary}
             </p>
           </section>
         )}
 
         {data?.experience?.length > 0 && (
           <section>
-            <h2 className="text-sm font-bold text-gray-400 uppercase tracking-widest border-b border-gray-200 pb-2 mb-6">
-              Experience
-            </h2>
-            <div className="space-y-6">
+            <div className="flex justify-center mb-10">
+              <h2 className="text-[10px] font-bold text-gray-900 uppercase tracking-[0.3em] px-4 py-1 border border-gray-200">
+                Experience
+              </h2>
+            </div>
+            <div className="space-y-12">
               {data.experience.map((exp, i) => (
-                <div key={i} className="pl-4 border-l-2 border-gray-200">
-                  <div className="flex justify-between items-baseline mb-1">
-                    <h3 className="font-semibold text-gray-800 text-base">{exp.role} at {exp.company}</h3>
-                    <span className="text-xs text-gray-400 tracking-wider uppercase">{exp.duration}</span>
+                <div key={i} className="text-center">
+                  <h3 className="font-medium text-gray-900 text-sm tracking-wide uppercase mb-1">{exp.role}</h3>
+                  <div className="flex justify-center items-center gap-3 text-xs text-gray-500 uppercase tracking-widest mb-4">
+                    <span>{exp.company}</span>
+                    <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
+                    <span>{exp.duration}</span>
                   </div>
-                  <p className="text-sm text-gray-600 leading-relaxed mt-2">{exp.description}</p>
+                  <p className="text-[13px] text-gray-600 leading-relaxed font-light text-justify max-w-[500px] mx-auto">{exp.description}</p>
                 </div>
               ))}
             </div>
@@ -40,54 +48,56 @@ export default function MinimalTemplate({ data }) {
 
         {data?.projects?.length > 0 && (
           <section>
-            <h2 className="text-sm font-bold text-gray-400 uppercase tracking-widest border-b border-gray-200 pb-2 mb-6 mt-8">
-              Projects
-            </h2>
-            <div className="space-y-6">
+            <div className="flex justify-center mb-10 mt-16">
+              <h2 className="text-[10px] font-bold text-gray-900 uppercase tracking-[0.3em] px-4 py-1 border border-gray-200">
+                Projects
+              </h2>
+            </div>
+            <div className="space-y-10">
               {data.projects.map((proj, i) => (
-                <div key={i} className="pl-4 border-l-2 border-gray-200">
-                  <div className="flex justify-between items-baseline mb-1">
-                    <h3 className="font-semibold text-gray-800 text-base">{proj.title}</h3>
-                    <span className="text-xs text-gray-400 tracking-wider lowercase">{proj.link}</span>
+                <div key={i} className="text-center">
+                  <h3 className="font-medium text-gray-900 text-sm tracking-wide mb-1">{proj.title}</h3>
+                  <p className="text-[10px] text-gray-400 lowercase tracking-wider mb-4 font-mono">{proj.link}</p>
+                  <p className="text-[13px] text-gray-600 leading-relaxed font-light text-justify max-w-[500px] mx-auto whitespace-pre-line">{proj.description}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <div className="grid grid-cols-2 gap-12 mt-16 text-center">
+          {data?.education?.length > 0 && (
+            <section>
+              <h2 className="text-[9px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-6 border-b border-gray-100 pb-2 inline-block">
+                Education
+              </h2>
+              <div className="space-y-6">
+                {data.education.map((edu, i) => (
+                  <div key={i}>
+                    <h3 className="font-medium text-gray-800 text-[13px]">{edu.degree}</h3>
+                    <p className="text-[11px] text-gray-500 mt-1 uppercase tracking-wider">{edu.institution}</p>
+                    <p className="text-[10px] text-gray-400 mt-1">{edu.year}</p>
                   </div>
-                  <p className="text-sm text-gray-600 leading-relaxed mt-2">{proj.description}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
+                ))}
+              </div>
+            </section>
+          )}
 
-        {data?.education?.length > 0 && (
-          <section>
-            <h2 className="text-sm font-bold text-gray-400 uppercase tracking-widest border-b border-gray-200 pb-2 mb-6 mt-8">
-              Education
-            </h2>
-            <div className="grid grid-cols-2 gap-4">
-              {data.education.map((edu, i) => (
-                <div key={i}>
-                  <h3 className="font-semibold text-gray-800 text-sm">{edu.degree}</h3>
-                  <p className="text-sm text-gray-500">{edu.institution}</p>
-                  <p className="text-xs text-gray-400 mt-1">{edu.year}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {data?.skills?.length > 0 && (
-          <section>
-            <h2 className="text-sm font-bold text-gray-400 uppercase tracking-widest border-b border-gray-200 pb-2 mb-6 mt-8">
-              Skills
-            </h2>
-            <div className="flex flex-wrap gap-2">
-              {data.skills.map((skill, i) => (
-                <span key={i} className="text-xs text-gray-600 border border-gray-200 px-3 py-1 rounded-full">
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </section>
-        )}
+          {data?.skills?.length > 0 && (
+            <section>
+              <h2 className="text-[9px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-6 border-b border-gray-100 pb-2 inline-block">
+                Skills
+              </h2>
+              <div className="flex flex-col gap-3 items-center">
+                {data.skills.map((skill, i) => (
+                  <span key={i} className="text-[12px] font-light text-gray-700 tracking-wide">
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
       </div>
     </div>
   );

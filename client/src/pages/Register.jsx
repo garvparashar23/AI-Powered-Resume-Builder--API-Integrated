@@ -8,7 +8,7 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { login as loginAction } from '../store/authSlice';
 import { API_URL } from '../config';
-import { Mail, Lock, User as UserIcon, UserPlus, LogIn, ArrowRight } from 'lucide-react';
+import { Mail, Lock, User as UserIcon } from 'lucide-react';
 
 const schema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters" }),
@@ -42,103 +42,97 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex font-sans">
       {/* Left side - Form */}
       <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-20 xl:px-24 bg-white">
         <div className="mx-auto w-full max-w-sm lg:w-96">
-          <div className="text-center sm:text-left">
-            <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight">
+          <div className="text-center sm:text-left mb-10">
+            <h2 className="text-3xl font-serif text-[#051C2C] tracking-tight mb-2">
               Create an account
             </h2>
-            <p className="mt-2 text-sm text-gray-600">
-              Join thousands of professionals building amazing resumes.
+            <p className="text-sm text-gray-500 font-light">
+              Join elite professionals building impact-driven resumes.
             </p>
           </div>
 
-          <div className="mt-8">
+          <div>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-xs font-bold uppercase tracking-widest text-[#051C2C] mb-2">
                   Full Name
                 </label>
-                <div className="mt-1 relative rounded-md shadow-sm">
+                <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <UserIcon className="h-5 w-5 text-gray-400" />
                   </div>
                   <input
                     {...register('name')}
                     type="text"
-                    className="focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 sm:text-sm border border-gray-300 rounded-lg py-3 px-4 bg-gray-50 focus:bg-white transition-colors"
-                    placeholder="John Doe"
+                    className="block w-full pl-10 border border-gray-300 rounded-none py-3 px-4 bg-transparent outline-none focus:border-[#051C2C] transition-colors font-light"
+                    placeholder="Jane Doe"
                   />
                 </div>
                 {errors.name && (
-                  <p className="mt-2 text-sm text-red-600 font-medium">{errors.name.message}</p>
+                  <p className="mt-2 text-xs text-red-600 font-medium">{errors.name.message}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-xs font-bold uppercase tracking-widest text-[#051C2C] mb-2">
                   Email Address
                 </label>
-                <div className="mt-1 relative rounded-md shadow-sm">
+                <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <Mail className="h-5 w-5 text-gray-400" />
                   </div>
                   <input
                     {...register('email')}
                     type="email"
-                    className="focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 sm:text-sm border border-gray-300 rounded-lg py-3 px-4 bg-gray-50 focus:bg-white transition-colors"
+                    className="block w-full pl-10 border border-gray-300 rounded-none py-3 px-4 bg-transparent outline-none focus:border-[#051C2C] transition-colors font-light"
                     placeholder="you@example.com"
                   />
                 </div>
                 {errors.email && (
-                  <p className="mt-2 text-sm text-red-600 font-medium">{errors.email.message}</p>
+                  <p className="mt-2 text-xs text-red-600 font-medium">{errors.email.message}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-xs font-bold uppercase tracking-widest text-[#051C2C] mb-2">
                   Password
                 </label>
-                <div className="mt-1 relative rounded-md shadow-sm">
+                <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <Lock className="h-5 w-5 text-gray-400" />
                   </div>
                   <input
                     {...register('password')}
                     type="password"
-                    className="focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 sm:text-sm border border-gray-300 rounded-lg py-3 px-4 bg-gray-50 focus:bg-white transition-colors"
+                    className="block w-full pl-10 border border-gray-300 rounded-none py-3 px-4 bg-transparent outline-none focus:border-[#051C2C] transition-colors font-light"
                     placeholder="••••••••"
                   />
                 </div>
                 {errors.password && (
-                  <p className="mt-2 text-sm text-red-600 font-medium">{errors.password.message}</p>
+                  <p className="mt-2 text-xs text-red-600 font-medium">{errors.password.message}</p>
                 )}
               </div>
 
-              <div>
+              <div className="pt-2">
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-70 disabled:cursor-not-allowed transition-all lg:hover:-translate-y-0.5"
+                  className="w-full flex justify-center items-center py-4 px-4 shadow-sm text-sm font-bold tracking-widest uppercase text-white bg-[#051C2C] hover:bg-gray-900 disabled:opacity-70 disabled:cursor-not-allowed transition-all"
                 >
-                  {loading ? (
-                    'Creating account...'
-                  ) : (
-                    <>
-                      Sign Up <UserPlus className="ml-2 h-4 w-4" />
-                    </>
-                  )}
+                  {loading ? 'Creating account...' : 'Sign Up'}
                 </button>
               </div>
             </form>
             
-            <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600">
+            <div className="mt-8 text-center sm:text-left border-t border-gray-100 pt-6">
+              <p className="text-sm text-gray-500 font-light">
                 Already have an account?{' '}
-                <Link to="/login" className="font-semibold text-emerald-600 hover:text-emerald-500 hover:underline transition-colors">
+                <Link to="/login" className="font-semibold text-[#051C2C] hover:underline transition-colors">
                   Sign in instantly
                 </Link>
               </p>
@@ -147,33 +141,27 @@ export default function Register() {
         </div>
       </div>
 
-      {/* Right side - Image/Gradient */}
-      <div className="hidden lg:flex lg:flex-1 relative bg-slate-900 overflow-hidden items-center justify-center">
-        {/* Abstract Background Design */}
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-600 to-teal-900 opacity-90 z-0" />
-        <div className="absolute top-0 -left-10 w-96 h-96 bg-emerald-500 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-blob"></div>
-        <div className="absolute top-0 -right-10 w-96 h-96 bg-teal-500 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-blob animation-delay-2000"></div>
-        <div className="absolute -bottom-20 left-20 w-96 h-96 bg-green-500 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-blob animation-delay-4000"></div>
+      {/* Right side - Deep Corporate Branding */}
+      <div className="hidden lg:flex lg:flex-1 relative bg-[#051C2C] overflow-hidden items-center justify-center p-12">
+        {/* Abstract minimalistic overlay */}
+        <div className="absolute inset-0 opacity-10">
+            <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="w-full h-full text-white">
+               <path d="M 0 100 C 50 50, 50 0, 100 0 L 100 100 Z" fill="currentColor" />
+            </svg>
+        </div>
         
-        <div className="relative z-10 w-full max-w-lg px-8 text-center text-white">
-          <div className="mb-8 flex justify-center">
-            <div className="h-16 w-16 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-lg border border-white/20">
-              <LogIn className="h-8 w-8 text-white" />
+        <div className="relative z-10 w-full max-w-lg">
+          <div className="mb-10">
+            <div className="h-12 w-12 bg-white flex items-center justify-center text-[#051C2C] font-serif font-bold text-2xl italic">
+              R
             </div>
           </div>
-          <h2 className="text-4xl font-bold mb-6 tracking-tight drop-shadow-sm">Join the AI Revolution</h2>
-          <p className="text-lg text-emerald-100 mb-8 leading-relaxed">
-            Register today and automatically unleash the power of Artificial Intelligence to craft your perfectly optimized resume. 
+          <h2 className="text-5xl font-serif text-white mb-6 leading-tight">Join the Revolution</h2>
+          <p className="text-lg text-white/70 font-light mb-12 leading-relaxed">
+            Register today and automatically unleash the power of customized Artificial Intelligence to craft your perfectly optimized resume structure.
           </p>
-          <div className="flex items-center justify-center space-x-4 pb-4">
-            <div className="flex -space-x-3">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="w-10 h-10 rounded-full border-2 border-teal-900 bg-gray-300 flex items-center justify-center overflow-hidden shadow-sm">
-                  <img src={`https://i.pravatar.cc/100?img=${i + 20}`} alt={`user ${i}`} className="w-full h-full object-cover" />
-                </div>
-              ))}
-            </div>
-            <div className="text-sm text-emerald-200 font-medium">Join 10,000+ professionals</div>
+          <div className="border-l border-white/20 pl-6 py-2">
+            <p className="text-sm text-white/50 font-light tracking-wide uppercase">Used by elite applicants at top tier firms</p>
           </div>
         </div>
       </div>

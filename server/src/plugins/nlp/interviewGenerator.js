@@ -7,7 +7,10 @@ const logger = require('../../utils/logger');
 
 let openai;
 if (process.env.OPENAI_API_KEY) {
-  openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  openai = new OpenAI({ 
+    apiKey: process.env.OPENAI_API_KEY,
+    baseURL: 'https://api.groq.com/openai/v1'
+  });
 }
 
 const generateInterviewQuestions = async (resumeData, targetRole) => {
@@ -40,7 +43,7 @@ const generateInterviewQuestions = async (resumeData, targetRole) => {
 
     const completion = await openai.chat.completions.create({
       messages: [{ role: "system", content: "You are an expert interviewer." }, { role: "user", content: prompt }],
-      model: "gpt-3.5-turbo",
+      model: "llama-3.1-8b-instant",
       temperature: 0.8,
     });
 

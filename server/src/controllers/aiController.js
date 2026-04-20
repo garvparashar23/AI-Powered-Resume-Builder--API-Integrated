@@ -13,12 +13,15 @@ const logger = require('../utils/logger');
 // Initialize OpenAI conditionally
 let openai;
 if (process.env.OPENAI_API_KEY) {
-  openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  openai = new OpenAI({ 
+    apiKey: process.env.OPENAI_API_KEY,
+    baseURL: 'https://api.groq.com/openai/v1'
+  });
 }
 
 const generateSummary = async (req, res) => {
   try {
-    const { role, experienceSettings, tone = 'modern' } = req.body;
+    const { role, skills, experience, education, tone = 'modern' } = req.body;
     
     if (!openai) {
       logger.warn('OpenAI API Key missing, returning mock summary.');
@@ -27,12 +30,13 @@ const generateSummary = async (req, res) => {
       return res.json({ summary: mockResponse });
     }
 
-    const basePrompt = `Generate a professional summary for a ${role} with the following background details: ${JSON.stringify(experienceSettings)}. Keep it under 4 sentences.`;
+    const backgroundDetails = { skills, experience, education };
+    const basePrompt = `Generate a professional summary for a ${role} with the following background details: ${JSON.stringify(backgroundDetails)}. Keep it under 4 sentences.`;
     const finalPrompt = buildEnhancedPrompt(basePrompt, tone);
 
     const completion = await openai.chat.completions.create({
       messages: [{ role: "system", content: "You are an expert tech recruiter and resume writer." }, { role: "user", content: finalPrompt }],
-      model: "gpt-3.5-turbo",
+      model: "llama-3.1-8b-instant",
     });
 
     res.json({ summary: completion.choices[0].message.content });

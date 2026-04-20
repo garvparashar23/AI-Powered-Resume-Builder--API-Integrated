@@ -11,6 +11,8 @@ import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import AdminDashboard from './pages/AdminDashboard';
 import PublicResumeView from './pages/PublicResumeView';
+import AnalyticsDashboard from './pages/AnalyticsDashboard'; // [Phase 3]
+import RecruiterPanel from './pages/RecruiterPanel'; // [Phase 3]
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useSelector((state) => state.auth);
@@ -59,6 +61,22 @@ function App() {
             element={
               <ProtectedRoute>
                 <AdminDashboard />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/analytics" 
+            element={
+              <ProtectedRoute>
+                <AnalyticsDashboard />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/recruiter" 
+            element={
+              <ProtectedRoute>
+                <RecruiterPanel />
               </ProtectedRoute>
             } 
           />

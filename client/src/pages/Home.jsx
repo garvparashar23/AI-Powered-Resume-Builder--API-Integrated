@@ -1,461 +1,329 @@
 import { Link } from 'react-router-dom';
-import { ArrowUp, Star, Smartphone, LayoutTemplate, Palette, FileText, CheckSquare, Lightbulb, ChevronLeft, ChevronRight, Moon } from 'lucide-react';
+import { ArrowRight, Play, Check, Minus } from 'lucide-react';
 import { useState } from 'react';
 
-// Reusable Button Components
+// Reusable elegant buttons
 const PrimaryButton = ({ children, to, className = '' }) => (
-  <Link to={to} className={`bg-gradient-to-r from-orange-500 to-rose-500 hover:from-orange-600 hover:to-rose-600 text-white px-8 py-4 rounded-xl font-bold shadow-lg transition-transform hover:-translate-y-1 inline-block text-center ${className}`}>
+  <Link to={to} className={`bg-white text-[#051C2C] hover:bg-gray-100 px-8 py-4 font-semibold transition-all inline-block text-center flex items-center justify-center gap-2 tracking-wide ${className}`}>
     {children}
   </Link>
 );
 
-const OutlineButton = ({ children, to, className = '' }) => (
-  <Link to={to} className={`border border-rose-300 text-rose-500 hover:bg-rose-50 px-8 py-4 rounded-xl font-bold transition-colors inline-block text-center ${className}`}>
+const OutlineDarkButton = ({ children, to, className = '' }) => (
+  <Link to={to} className={`border border-[#ffffff40] text-white hover:bg-white/10 px-8 py-4 font-semibold transition-all inline-block text-center flex items-center justify-center gap-2 tracking-wide ${className}`}>
+    {children}
+  </Link>
+);
+
+const OutlineLightButton = ({ children, to, className = '' }) => (
+  <Link to={to} className={`border border-[#051C2C] text-[#051C2C] hover:bg-[#051C2C] hover:text-white px-8 py-4 font-semibold transition-all inline-block text-center flex items-center justify-center gap-2 tracking-wide ${className}`}>
     {children}
   </Link>
 );
 
 export default function Home() {
+  const [navOpen, setNavOpen] = useState(false);
+
   return (
-    <div className="min-h-screen bg-white text-slate-800 font-sans selection:bg-rose-200">
-      {/* Header */}
-      <header className="border-b border-gray-100 bg-white sticky top-0 z-50">
-        <nav className="max-w-[1400px] mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="flex items-center justify-center w-8 h-8 rounded bg-gradient-to-br from-purple-500 to-rose-500 text-white font-bold text-xl">
-               <span className="transform -skew-x-12">R</span>
-            </div>
-            <span className="text-xl font-bold text-purple-700 tracking-tight">Resume Builder</span>
+    <div className="min-h-screen bg-white text-[#051C2C] font-sans selection:bg-[#051C2C] selection:text-white">
+      {/* Header - Minimal & Corporate */}
+      <header className="bg-[#051C2C] text-white sticky top-0 z-50 border-b border-white/10">
+        <nav className="max-w-[1440px] mx-auto px-6 h-[72px] flex items-center justify-between">
+          <div className="flex items-center gap-3">
+             <div className="w-8 h-8 bg-blue-600 text-white font-serif italic font-bold text-xl flex items-center justify-center rounded-sm">
+                R
+             </div>
+             <span className="text-xl font-serif tracking-wide font-normal">The Resume Doctrine</span>
           </div>
           
-          <div className="hidden lg:flex items-center gap-8 text-[15px] font-semibold text-slate-700">
-            <a href="#" className="hover:text-rose-500 transition">Resume Builder App</a>
-            <a href="#" className="hover:text-rose-500 transition">Resume Examples</a>
-            <a href="#" className="hover:text-rose-500 transition">Resume Templates</a>
-            <a href="#" className="hover:text-rose-500 transition">Cover Letter Builder</a>
-            <a href="#" className="hover:text-rose-500 transition">Career Center</a>
-            <Link to="/login" className="hover:text-rose-500 transition">My Account</Link>
+          <div className="hidden lg:flex items-center gap-10 text-[14px] font-medium tracking-wider uppercase">
+            <Link to="/register" className="hover:text-blue-400 transition-colors">Platform</Link>
+            <a href="#impact" className="hover:text-blue-400 transition-colors">Our Impact</a>
+            <a href="#features" className="hover:text-blue-400 transition-colors">Capabilities</a>
+            <a href="#about" className="hover:text-blue-400 transition-colors">About</a>
           </div>
 
-          <div className="flex items-center gap-4">
-            <Link to="/register" className="border border-rose-300 text-rose-500 hover:bg-rose-50 px-6 py-2.5 rounded-xl font-bold transition">
-              Build My Resume
+          <div className="hidden lg:flex items-center gap-6 text-[14px] font-medium">
+            <Link to="/login" className="hover:text-blue-400 transition-colors tracking-wider uppercase">Log in</Link>
+            <div className="h-4 w-px bg-white/30"></div>
+            <Link to="/register" className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 transition-colors tracking-wider uppercase">
+              Start Building
             </Link>
           </div>
+
+          <button className="lg:hidden p-2 text-white" onClick={() => setNavOpen(!navOpen)}>
+             <div className="space-y-1.5">
+                <div className="w-6 h-0.5 bg-white"></div>
+                <div className="w-6 h-0.5 bg-white"></div>
+                <div className="w-6 h-0.5 bg-white"></div>
+             </div>
+          </button>
         </nav>
       </header>
 
-      {/* Hero Section */}
-      <section className="max-w-[1400px] mx-auto px-6 py-12 lg:py-24 grid lg:grid-cols-2 gap-12 items-center">
-         {/* Left: Graphic Placeholder (Using CSS to simulate the image) */}
-         <div className="relative order-2 lg:order-1 flex justify-center">
-            <div className="absolute inset-0 bg-pink-200 rounded-[3rem] transform -rotate-6 scale-95 opacity-50 z-0 blur-sm"></div>
-            <div className="bg-white rounded-md shadow-2xl border border-gray-100 w-full max-w-md relative z-10 overflow-hidden flex flex-col">
-               {/* Header of Resume Graphic */}
-               <div className="bg-[#6B4E99] p-6 flex items-center gap-4 text-white rounded-t-md">
-                  <div className="w-16 h-16 rounded-full bg-slate-300 border border-white flex-shrink-0"></div>
-                  <div>
-                    <div className="text-xl font-serif">Jessica Lang</div>
-                    <div className="text-sm opacity-80 mt-1">Registered Nurse</div>
-                  </div>
-               </div>
-               
-               <div className="p-6 flex-1 flex flex-col gap-4 bg-white">
-                  <div className="grid grid-cols-3 gap-6">
-                     <div className="col-span-1 border-r border-gray-200 pr-4 space-y-4">
-                        <div className="h-3 w-full bg-purple-200 rounded"></div>
-                        <div className="h-2 w-3/4 bg-gray-200 rounded"></div>
-                        <div className="h-2 w-5/6 bg-gray-200 rounded"></div>
-                        <div className="h-2 w-full bg-gray-200 rounded"></div>
-                        <div className="h-2 w-2/3 bg-gray-200 rounded"></div>
-                     </div>
-                     <div className="col-span-2 space-y-6">
-                        <div className="h-3 w-1/3 bg-purple-200 rounded"></div>
-                        <div className="space-y-2">
-                           <div className="h-2 w-full bg-gray-200 rounded"></div>
-                           <div className="h-2 w-full bg-gray-200 rounded"></div>
-                           <div className="h-2 w-4/5 bg-gray-200 rounded"></div>
-                        </div>
-                        <div className="h-3 w-1/4 bg-purple-200 rounded"></div>
-                        <div className="space-y-2">
-                           <div className="h-2 w-full bg-gray-200 rounded"></div>
-                           <div className="h-2 w-11/12 bg-gray-200 rounded"></div>
-                           <div className="h-2 w-10/12 bg-gray-200 rounded"></div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-
-               {/* Absolute Floating Settings Panel Simulation */}
-               <div className="absolute top-1/2 left-8 transform -translate-y-1/2 bg-white rounded shadow-[0_0_20px_rgba(0,0,0,0.15)] border border-gray-100 w-[240px] p-4 z-20">
-                  <div className="flex items-center justify-between mb-4 border-b pb-2">
-                     <span className="text-xs font-bold text-gray-700">Templates & colors</span>
-                  </div>
-                  <div className="grid grid-cols-4 gap-3">
-                     <div className="h-20 bg-slate-100 border rounded"></div>
-                     <div className="h-20 bg-slate-100 border border-purple-400 rounded"></div>
-                     <div className="h-20 bg-green-50 border rounded"></div>
-                     <div className="h-20 bg-slate-100 border rounded"></div>
-                     <div className="h-20 bg-zinc-100 border rounded"></div>
-                     <div className="h-20 bg-rose-50 border rounded"></div>
-                     <div className="h-20 bg-blue-50 border rounded"></div>
-                     <div className="h-20 bg-orange-50 border rounded"></div>
-                  </div>
-               </div>
-            </div>
+      {/* Hero Section - Deep Blue like McKinsey */}
+      <section className="bg-[#051C2C] text-white relative overflow-hidden pt-16 pb-32 lg:pt-32 lg:pb-48">
+         {/* Subtle abstract line styling in background */}
+         <div className="absolute right-0 top-0 bottom-0 w-1/2 opacity-20 pointer-events-none">
+            <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="w-full h-full text-white">
+               <path d="M 0 100 C 50 50, 50 0, 100 0 L 100 100 Z" fill="currentColor" />
+            </svg>
+         </div>
+         <div className="absolute left-0 bottom-0 top-0 w-1/3 opacity-5 pointer-events-none">
+            <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="w-full h-full stroke-white" fill="none" strokeWidth="0.5">
+               <path d="M 0 100 Q 50 50 100 0" />
+               <path d="M 0 90 Q 50 40 100 0" />
+               <path d="M 0 80 Q 50 30 100 0" />
+               <path d="M 0 70 Q 50 20 100 0" />
+               <path d="M 0 60 Q 50 10 100 0" />
+            </svg>
          </div>
 
-         {/* Right: Copy */}
-         <div className="order-1 lg:order-2 space-y-8 pl-0 lg:pl-10">
-            <h1 className="text-5xl lg:text-[4.5rem] font-bold text-[#1a1a1a] leading-[1.1] tracking-tight">
-              The Best Online Resume Builder
+         <div className="max-w-[1440px] mx-auto px-6 relative z-10">
+            <p className="text-[13px] uppercase tracking-[0.2em] mb-4 text-blue-300 font-bold inline-block pb-1">AI Powered Resume Builder</p>
+            <h1 className="text-5xl lg:text-[5.5rem] font-serif leading-[1.1] mb-6 max-w-4xl tracking-tight">
+              The Resume Doctrine
             </h1>
-            <p className="text-xl text-slate-700 font-medium leading-relaxed max-w-xl">
-              Easily create a resume from any device with our best-in-class resume builder platform.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 pt-2">
-               <PrimaryButton to="/register" className="flex-1 max-w-[280px]">
-                  Create My Resume Now
-               </PrimaryButton>
-               <OutlineButton to="/login" className="flex-1 max-w-[280px]">
-                  Import Resume
-               </OutlineButton>
-            </div>
-
-            <div className="flex items-center gap-8 pt-6 pb-8 border-b border-gray-200">
-               <div className="space-y-1 text-[#86409b]">
-                  <div className="flex items-center gap-2 font-bold text-4xl">
-                     <ArrowUp size={30} strokeWidth={3} className="text-[#86409b]" /> 38%
-                  </div>
-                  <p className="text-sm font-medium opacity-80">more interviews</p>
-               </div>
-               <div className="w-px h-16 bg-gray-300"></div>
-               <div className="space-y-1 text-[#86409b]">
-                  <div className="flex items-center gap-2 font-bold text-4xl">
-                     <ArrowUp size={30} strokeWidth={3} className="text-[#86409b]" /> 23%
-                  </div>
-                  <p className="text-sm font-medium opacity-80">more likely to<br/>get a job offer</p>
-               </div>
-            </div>
-
-            <div className="space-y-4 pt-2">
-               <p className="font-bold text-slate-800">Subscribers have been hired by: *</p>
-               <div className="flex items-center gap-8 flex-wrap">
-                  {/* Text based logos simulating the image */}
-                  <span className="text-2xl font-black text-black lowercase tracking-tighter flex items-center">amazon</span>
-                  <span className="text-2xl font-bold text-black tracking-tighter">Deloitte.</span>
-                  <span className="text-2xl font-serif text-black">J.P.Morgan</span>
-                  <span className="text-2xl font-bold text-black lowercase">facebook</span>
-                  <span className="text-xl font-serif text-black leading-none font-bold">Goldman<br/>Sachs</span>
-               </div>
-            </div>
-         </div>
-      </section>
-
-      {/* Templates Carousel Section */}
-      <section className="bg-slate-50 py-24 relative overflow-hidden">
-         {/* Subtle background glow */}
-         <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-rose-200/40 rounded-full blur-3xl pointer-events-none"></div>
-         <div className="absolute top-10 right-1/4 w-96 h-96 bg-orange-200/40 rounded-full blur-3xl pointer-events-none"></div>
-
-         <div className="max-w-[1400px] mx-auto px-6 relative z-10 flex flex-col items-center">
-            
-            {/* The Carousel Track */}
-            <div className="flex gap-8 overflow-x-auto w-full pb-16 snap-x hide-scrollbar px-4 sm:px-10 justify-center items-center">
-               
-               {/* Template 1 */}
-               <div className="min-w-[300px] w-[350px] bg-white rounded shadow flex-shrink-0 snap-center transition-transform hover:-translate-y-2 border border-purple-100 p-2 opacity-80 scale-95">
-                 <div className="h-[450px] bg-white border border-purple-200 flex flex-col">
-                    <div className="text-center pt-8 pb-4 border-b border-purple-100 relative">
-                       <div className="text-purple-800 font-serif text-xl">Alex Johnson</div>
-                       <div className="text-[10px] text-gray-500 mt-2">123 Street Name • (555) 555-5555</div>
-                    </div>
-                    <div className="flex gap-4 mt-4 h-full">
-                       <div className="w-1/3 border-r border-purple-100 pr-2 space-y-4 flex flex-col items-center">
-                          <div className="h-2 w-1/2 bg-purple-100"></div>
-                          <div className="h-1 w-3/4 bg-gray-200"></div>
-                          <div className="h-1 w-full bg-gray-200"></div>
-                       </div>
-                       <div className="w-2/3 space-y-4 pr-4">
-                          <div className="h-2 w-1/3 bg-purple-200 text-center mx-auto"></div>
-                          <div className="h-1 w-full bg-gray-200"></div>
-                          <div className="h-1 w-5/6 bg-gray-200"></div>
-                       </div>
-                    </div>
-                 </div>
-               </div>
-
-               {/* Template 2 */}
-               <div className="min-w-[300px] w-[350px] bg-white rounded shadow flex-shrink-0 snap-center transition-transform hover:-translate-y-2 border border-rose-100 p-2 opacity-80 scale-95">
-                 <div className="h-[450px] bg-white border border-rose-200 flex flex-col">
-                    <div className="bg-rose-700 h-28 w-full relative text-center text-white flex items-end justify-center pb-6">
-                       <span className="font-sans text-2xl tracking-widest">JAMIE SMITH</span>
-                    </div>
-                    <div className="flex gap-4 mt-6 px-4 h-full">
-                       <div className="w-1/3 space-y-4">
-                          <div className="h-2 w-full bg-rose-200"></div><div className="h-1 w-full bg-gray-200"></div><div className="h-1 w-3/4 bg-gray-200"></div>
-                       </div>
-                       <div className="w-2/3 space-y-4 border-l border-rose-100 pl-4">
-                          <div className="h-2 w-1/3 bg-rose-200"></div><div className="h-1 w-full bg-gray-200"></div><div className="h-1 w-5/6 bg-gray-200"></div>
-                       </div>
-                    </div>
-                 </div>
-               </div>
-
-               {/* Template 3 (Centered / Hovered) */}
-               <div className="min-w-[300px] w-[380px] bg-white rounded shadow-2xl flex-shrink-0 snap-center scale-100 border border-gray-200 p-2 relative group z-20 mx-4">
-                 <div className="h-[480px] bg-white rounded border border-gray-100 flex flex-col">
-                    <div className="bg-[#2D3F58] h-24 w-full relative flex items-center px-6">
-                       <div className="w-14 h-14 bg-slate-300 rounded-full border-2 border-white absolute -bottom-7 left-6 shadow"></div>
-                       <span className="text-white ml-20 text-xl font-serif">Alex Johnson</span>
-                    </div>
-                    <div className="pt-12 px-6 space-y-6">
-                       <div className="space-y-2">
-                         <div className="h-1 w-full bg-gray-300"></div><div className="h-1 w-full bg-gray-300"></div><div className="h-1 w-3/4 bg-gray-300"></div>
-                       </div>
-                       <div className="space-y-3">
-                         <div className="h-2 w-1/3 bg-blue-800 rounded"></div>
-                         <div className="h-1 w-full bg-gray-300"></div><div className="h-1 w-5/6 bg-gray-300"></div>
-                         <div className="h-1 w-4/6 bg-gray-300"></div>
-                       </div>
-                       <div className="space-y-3 pt-4">
-                         <div className="h-2 w-1/4 bg-blue-800 rounded"></div>
-                         <div className="h-1 w-full bg-gray-300"></div><div className="h-1 w-5/6 bg-gray-300"></div>
-                       </div>
-                    </div>
-                 </div>
-
-                 {/* Hover Overlay Button */}
-                 <div className="absolute inset-0 bg-white/10 flex items-center justify-center opacity-100 transition-opacity">
-                    <Link to="/register" className="bg-gradient-to-r from-orange-400 to-rose-500 hover:from-orange-500 hover:to-rose-600 text-white px-8 py-4 rounded-lg font-bold shadow-2xl hover:scale-105 transition-transform text-lg flex items-center gap-0">
-                       Use This Template
-                    </Link>
-                 </div>
-               </div>
-
-               {/* Template 4 */}
-               <div className="min-w-[300px] w-[350px] bg-white rounded shadow flex-shrink-0 snap-center transition-transform hover:-translate-y-2 border border-orange-100 p-2 opacity-80 scale-95">
-                 <div className="h-[450px] bg-white border border-gray-100 flex flex-col pt-8 px-6">
-                    <div className="w-2/3 h-10 bg-[#E88B35] rounded-r-3xl -ml-6 mb-6 flex items-center pl-6 text-white font-bold text-xl">Taylor Lee</div>
-                    <div className="space-y-6">
-                       <div className="space-y-3">
-                         <div className="h-1 w-full bg-gray-300"></div><div className="h-1 w-5/6 bg-gray-300"></div>
-                       </div>
-                        <div className="space-y-3">
-                         <div className="h-2 w-1/3 bg-[#E88B35] rounded"></div>
-                         <div className="h-1 w-full bg-gray-300"></div><div className="h-1 w-5/6 bg-gray-300"></div>
-                       </div>
-                       <div className="space-y-3">
-                         <div className="h-2 w-1/3 bg-[#E88B35] rounded"></div>
-                         <div className="h-1 w-full bg-gray-300"></div><div className="h-1 w-5/6 bg-gray-300"></div>
-                       </div>
-                    </div>
-                 </div>
-               </div>
-               
-            </div>
-
-            {/* Dots */}
-            <div className="flex gap-4 mb-12 items-center">
-               <ChevronLeft className="text-orange-400 cursor-pointer w-6 h-6 stroke-[3]" />
-               <div className="w-3 h-3 rounded-full border border-orange-400 cursor-pointer"></div>
-               <div className="w-3 h-3 rounded-full border border-orange-400 cursor-pointer"></div>
-               <div className="w-3 h-3 rounded-full border border-orange-400 cursor-pointer"></div>
-               <div className="w-3 h-3 rounded-full border border-orange-400 cursor-pointer"></div>
-               <div className="w-3 h-3 rounded-full border border-orange-400 cursor-pointer"></div>
-               <div className="w-3 h-3 rounded-full border border-orange-400 cursor-pointer"></div>
-               <div className="w-3 h-3 rounded-full border border-orange-400 cursor-pointer"></div>
-               <div className="w-3 h-3 rounded-full bg-orange-400 cursor-pointer scale-[1.2]"></div>
-               <ChevronRight className="text-orange-400 cursor-pointer w-6 h-6 stroke-[3]" />
-            </div>
-
-            <OutlineButton to="/register" className="bg-white border-orange-200 text-orange-500 hover:bg-orange-50 font-bold px-12 py-4 shadow-sm text-lg rounded-xl">
-               See All Resume Templates
-            </OutlineButton>
-         </div>
-      </section>
-
-      {/* Features Grid Section */}
-      <section className="max-w-[1200px] mx-auto px-6 py-24 text-center">
-         <h2 className="text-4xl md:text-[2.75rem] font-bold text-[#1a1a1a] mb-6 tracking-tight leading-tight max-w-4xl mx-auto">
-            Get hired 36% faster with our feature-packed and easy-to-use resume builder app
-         </h2>
-         <p className="text-[17px] text-slate-800 mb-20 max-w-3xl mx-auto">
-            ResumeBuilder.com is now part of Bold LLC. For more information visit our <a href="#" className="underline">Terms of Use</a> and <a href="#" className="underline">Privacy Policy</a>.
-         </p>
-
-         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16 text-left">
-            {/* Feat 1 */}
-            <div>
-               <div className="text-purple-600 mb-4 opacity-80">
-                  <Smartphone size={40} className="stroke-[1.5]" />
-               </div>
-               <h3 className="text-2xl font-bold text-slate-900 mb-4">Powerful resume builder</h3>
-               <p className="text-slate-700 leading-relaxed text-[15px]">Use our potent creation tools and expert guidance to create the perfect resume for your next job application.</p>
-            </div>
-            {/* Feat 2 */}
-            <div>
-               <div className="text-purple-600 mb-4 opacity-80">
-                  <FileText size={40} className="stroke-[1.5]" />
-               </div>
-               <h3 className="text-2xl font-bold text-slate-900 mb-4">Professional templates</h3>
-               <p className="text-slate-700 leading-relaxed text-[15px]">Choose from 25+ applicant tracking systems (ATS)-friendly modern and professional templates.</p>
-            </div>
-            {/* Feat 3 */}
-            <div>
-               <div className="text-purple-600 mb-4 opacity-80">
-                  <Palette size={40} className="stroke-[1.5]" />
-               </div>
-               <h3 className="text-2xl font-bold text-slate-900 mb-4">Customize fonts and colors</h3>
-               <p className="text-slate-700 leading-relaxed text-[15px]">Select custom <a href="#" className="underline">fonts</a> and colors on any resume template.</p>
-            </div>
-            {/* Feat 4 */}
-            <div>
-               <div className="text-purple-600 mb-4 opacity-80">
-                  <LayoutTemplate size={40} className="stroke-[1.5]" />
-               </div>
-               <h3 className="text-2xl font-bold text-slate-900 mb-4">Free resume examples</h3>
-               <p className="text-slate-700 leading-relaxed text-[15px]">Use our more than 500 resume examples and templates to see what a great resume looks like in your field.</p>
-            </div>
-            {/* Feat 5 */}
-            <div>
-               <div className="text-purple-600 mb-4 opacity-80">
-                  <CheckSquare size={40} className="stroke-[1.5]" />
-               </div>
-               <h3 className="text-2xl font-bold text-slate-900 mb-4">ATS-friendly templates</h3>
-               <p className="text-slate-700 leading-relaxed text-[15px]">Sail through <a href="#" className="underline">applicant tracking systems</a> with resume templates that appeal to both machines and humans.</p>
-            </div>
-            {/* Feat 6 */}
-            <div>
-               <div className="text-purple-600 mb-4 opacity-80">
-                  <Lightbulb size={40} className="stroke-[1.5]" />
-               </div>
-               <h3 className="text-2xl font-bold text-slate-900 mb-4">Expert tips and guidance</h3>
-               <p className="text-slate-700 leading-relaxed text-[15px]">Get help every step of the way as you build your resume with expert tips and suggested phrases.</p>
-            </div>
-         </div>
-      </section>
-
-      {/* Large Bottom CTA Section */}
-      <section className="bg-gradient-to-r from-[#9b51e0] via-[#ed4c8b] to-[#f58442] py-24 md:py-32 text-center text-white relative overflow-hidden">
-         {/* Background Shapes Overlay */}
-         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white opacity-20 rotate-45 rounded-[120px] pointer-events-none mix-blend-overlay"></div>
-         <div className="absolute top-1/4 right-[10%] transform rotate-12 w-[300px] h-[300px] bg-white opacity-10 rounded-full pointer-events-none mix-blend-overlay"></div>
-         <div className="absolute bottom-1/4 left-[10%] transform -rotate-12 w-[400px] h-[400px] bg-white opacity-10 rounded-[80px] pointer-events-none mix-blend-overlay"></div>
-
-         <div className="max-w-[1000px] mx-auto px-6 relative z-10 flex flex-col items-center">
-            <h2 className="text-5xl md:text-[5rem] font-bold mb-12 leading-[1.1] tracking-tight text-white drop-shadow-sm">
-               Let's Land Your Dream<br/>Job Together
+            <h2 className="text-2xl font-light text-blue-100 mb-8 max-w-2xl tracking-wide">
+              "Where your skills are not <span className="font-semibold text-white">listed</span>, but <span className="font-semibold text-white">proven</span>."
             </h2>
-            <Link to="/register" className="bg-gradient-to-r from-orange-400 to-rose-500 hover:from-orange-500 hover:to-rose-600 transition-all text-white px-10 py-4 border border-white/20 rounded-lg font-bold shadow-xl hover:scale-105 inline-block text-lg mb-20 relative overflow-hidden">
-               Start Your Resume Now
-            </Link>
+            <p className="text-lg lg:text-xl font-light leading-relaxed max-w-2xl mb-12 text-blue-50/90">
+              For ambitious professionals. We empower your career strategy using industry-leading AI and premium parsing algorithms to solve the most complex hiring obstacles.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4">
+               <PrimaryButton to="/register">
+                 Build Your Resume <ArrowRight size={18} />
+               </PrimaryButton>
+               <OutlineDarkButton to="/login">
+                 Sign In / Import
+               </OutlineDarkButton>
+            </div>
+         </div>
+      </section>
 
-            <div className="w-full text-center">
-               <p className="text-[13px] font-bold mb-6 text-white/90">As seen in</p>
-               <div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-8 select-none text-white">
-                  <span className="text-2xl font-bold tracking-[0.2em] font-sans border-2 border-white px-1 py-0.5 leading-none">WIRED</span>
-                  <span className="text-3xl font-serif font-bold tracking-tighter">Forbes</span>
-                  <span className="text-[1.3rem] font-bold leading-none text-left tracking-tight">BUSINESS<br/>INSIDER</span>
-                  <span className="text-[1.8rem] font-sans font-bold lowercase tracking-tighter">Bloomberg</span>
-                  <span className="text-[2rem] font-bold italic tracking-tighter flex items-center pr-2"><span className="text-3xl mr-1">msn</span></span>
-                  <span className="text-3xl font-bold tracking-tighter lowercase">yahoo!</span>
-                  <span className="text-2xl font-black lowercase border-2 border-white px-1 rounded-sm leading-none py-1">npr</span>
-                  <span className="text-3xl font-serif font-semibold tracking-wide">FORTUNE</span>
-                  <span className="text-[1.7rem] font-black italic tracking-tighter bg-transparent text-white border-y-4 border-white px-0.5 pb-1 uppercase">HUFFPOST</span>
-                  <span className="text-2xl font-serif font-bold">Entrepreneur</span>
-                  <span className="text-[11px] font-extrabold uppercase leading-none text-left pl-1 border-l-4 border-white">Harvard<br/>Business<br/>Review</span>
+      {/* Our Impact Section */}
+      <section id="impact" className="py-24 bg-white">
+         <div className="max-w-[1440px] mx-auto px-6">
+            <div className="text-center mb-16">
+               <h2 className="text-[14px] font-bold uppercase tracking-[0.2em] text-[#051C2C] mb-2 after:content-[''] after:block after:w-12 after:h-[2px] after:bg-blue-600 after:mt-4 after:mx-auto">
+                 Our Impact
+               </h2>
+            </div>
+            
+            <div className="grid md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-200 text-center border-y border-gray-200">
+               <div className="py-12 md:py-16 px-6">
+                 <div className="text-[4rem] lg:text-[5rem] font-light text-blue-600 leading-none mb-4">
+                   38%
+                 </div>
+                 <h3 className="text-xl font-serif text-[#051C2C] mb-2">more interviews</h3>
+                 <p className="text-[14px] text-gray-500 font-light">secured by candidates using our premium algorithmic optimization</p>
+               </div>
+               <div className="py-12 md:py-16 px-6">
+                 <div className="text-[4rem] lg:text-[5rem] font-light text-blue-600 leading-none mb-4">
+                   2M+
+                 </div>
+                 <h3 className="text-xl font-serif text-[#051C2C] mb-2">resumes processed</h3>
+                 <p className="text-[14px] text-gray-500 font-light">across top-tier consulting, finance, and technology sectors globally</p>
+               </div>
+               <div className="py-12 md:py-16 px-6">
+                 <div className="text-[4rem] lg:text-[5rem] font-light text-blue-600 leading-none mb-4">
+                   95%
+                 </div>
+                 <h3 className="text-xl font-serif text-[#051C2C] mb-2">ATS pass rate</h3>
+                 <p className="text-[14px] text-gray-500 font-light">ensuring your human-readable impact reaches human reviewers</p>
                </div>
             </div>
          </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-white pt-24 pb-12 border-t border-gray-100 relative">
-         <div className="max-w-[1400px] mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-20 relative">
-            
-            {/* Logo & Trust Pilot & Socials */}
-            <div className="lg:col-span-1 space-y-10 pl-0">
-               <div className="flex items-center gap-2">
-                 <div className="flex items-center justify-center w-8 h-8 rounded bg-gradient-to-br from-purple-500 to-rose-500 text-white font-bold text-xl">
-                    <span className="transform -skew-x-12">R</span>
-                 </div>
-                 <span className="text-2xl font-bold text-purple-700 tracking-tight">Resume Builder</span>
-               </div>
+      {/* Corporate Features / "Tech that moves everything" Dark Section */}
+      <section id="features" className="bg-[#0b121f] text-white flex flex-col lg:flex-row min-h-[600px]">
+         <div className="lg:w-1/2 p-12 lg:p-24 flex flex-col justify-center border-b lg:border-b-0 lg:border-r border-white/10">
+            <h2 className="text-4xl lg:text-5xl font-serif mb-8 leading-tight tracking-tight">Intelligence that shapes careers</h2>
+            <p className="text-lg font-light text-gray-300 leading-relaxed mb-6">
+               There's a standard resume. Then there's a document that reimagines your organizational impact — built with AI context, structured by industry standards, and proven to create lasting professional value.
+            </p>
+            <p className="text-lg font-light text-gray-300 leading-relaxed mb-12">
+               Our proprietary intelligence engine evaluates semantic skills matching, biases, and structural integrity against enterprise ATS engines.
+            </p>
+            <div>
+               <Link to="/register" className="inline-flex items-center gap-2 font-bold text-white hover:text-blue-400 transition-colors uppercase tracking-[0.15em] text-[13px] border-b border-transparent hover:border-blue-400 pb-1">
+                 Discover Intelligence <ArrowRight size={16} />
+               </Link>
+            </div>
+         </div>
+         {/* Abstract Deep Visual area */}
+         <div className="lg:w-1/2 relative bg-gradient-to-br from-[#0b121f] to-blue-900 overflow-hidden flex items-center justify-center p-12 min-h-[400px]">
+             {/* Simulating the "eye/tech" deep visual from McKinsey style with abstract shapes */}
+             <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+CjxwYXRoIGQ9Ik0wIDBoNDB2NDBIMHoiIGZpbGw9Im5vbmUiLz4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjI1KSIvPgo8L3N2Zz4=')] opacity-20"></div>
+             <div className="w-[80%] h-[80%] rounded-full border border-blue-500/30 absolute animate-[spin_60s_linear_infinite]"></div>
+             <div className="w-[60%] h-[60%] rounded-full border border-blue-400/20 absolute animate-[spin_40s_linear_infinite_reverse]"></div>
+             <div className="absolute w-[200%] h-px bg-blue-500/50 rotate-12 transform shadow-[0_0_20px_10px_rgba(59,130,246,0.2)]"></div>
+             
+             <div className="relative z-10 glass-panel bg-white/5 backdrop-blur-md p-8 border border-white/10 max-w-sm w-full">
+                <div className="text-[12px] uppercase tracking-widest text-blue-300 mb-6 font-semibold">Live Analysis</div>
+                <div className="space-y-4">
+                   <div className="flex justify-between items-center text-sm border-b border-white/10 pb-2">
+                     <span className="font-light">Structural Score</span>
+                     <span className="font-serif italic text-lg">98/100</span>
+                   </div>
+                   <div className="flex justify-between items-center text-sm border-b border-white/10 pb-2">
+                     <span className="font-light">Keyword Density</span>
+                     <span className="font-serif italic text-lg">Optimal</span>
+                   </div>
+                   <div className="flex justify-between items-center text-sm">
+                     <span className="font-light">Sentiment</span>
+                     <span className="font-serif italic text-lg">Action-Oriented</span>
+                   </div>
+                </div>
+             </div>
+         </div>
+      </section>
 
-               <div className="space-y-1.5">
-                  <div className="flex items-center gap-1 text-[#00b67a] font-bold text-xl tracking-tight">
-                    <Star fill="currentColor" size={24} /> Trustpilot
+      {/* Featured Insights / Templates */}
+      <section className="py-24 max-w-[1440px] mx-auto px-6 bg-slate-50 border-t border-gray-200">
+         <div className="text-center mb-16">
+            <h2 className="text-[14px] font-bold uppercase tracking-[0.2em] text-[#051C2C] mb-2 after:content-[''] after:block after:w-12 after:h-[2px] after:bg-blue-600 after:mt-4 after:mx-auto">
+              Our Templates
+            </h2>
+         </div>
+         
+         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Elegant Template Cards */}
+            <div className="bg-white group cursor-pointer border border-gray-200 hover:border-[#051C2C] transition-colors p-1">
+               <div className="bg-slate-100 aspect-[3/4] relative overflow-hidden flex items-center justify-center p-6 grayscale group-hover:grayscale-0 transition-all duration-500">
+                  <div className="bg-white w-full h-full shadow-sm border border-gray-200 p-6 flex flex-col justify-start">
+                     <div className="w-full h-6 bg-slate-800 mb-6 flex items-center px-4 text-white text-[8px] font-serif uppercase tracking-widest">Modern Structure</div>
+                     <div className="h-2 w-3/4 bg-gray-200 mb-3"></div>
+                     <div className="h-2 w-full bg-gray-200 mb-2"></div>
+                     <div className="h-2 w-5/6 bg-gray-200 mb-8"></div>
+                     <div className="h-px w-full bg-gray-300 mb-4"></div>
+                     <div className="h-2 w-1/3 bg-slate-800 mb-3"></div>
+                     <div className="h-2 w-full bg-gray-200 mb-2"></div>
+                     <div className="h-2 w-4/5 bg-gray-200 mb-2"></div>
                   </div>
-                  <div className="flex gap-1 h-8">
-                     <div className="bg-[#00b67a] w-8 flex items-center justify-center text-white"><Star fill="currentColor" size={20} /></div>
-                     <div className="bg-[#00b67a] w-8 flex items-center justify-center text-white"><Star fill="currentColor" size={20} /></div>
-                     <div className="bg-[#00b67a] w-8 flex items-center justify-center text-white"><Star fill="currentColor" size={20} /></div>
-                     <div className="bg-[#00b67a] w-8 flex items-center justify-center text-white"><Star fill="currentColor" size={20} /></div>
-                     <div className="bg-[#00b67a] w-8 flex items-center justify-center text-white flex-row-reverse relative overflow-hidden">
-                        <Star fill="currentColor" size={20} />
-                        <div className="absolute top-0 right-0 h-full w-1/2 bg-gray-200 mix-blend-overlay"></div>
+                  <div className="absolute inset-0 bg-[#051C2C]/0 group-hover:bg-[#051C2C]/50 transition-colors flex items-center justify-center">
+                     <OutlineDarkButton to="/register" className="opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 text-sm py-3 px-6">
+                        Preview Format
+                     </OutlineDarkButton>
+                  </div>
+               </div>
+               <div className="py-6 px-4">
+                  <h3 className="font-serif text-2xl text-[#051C2C] mb-2">The Modern Executive</h3>
+                  <p className="text-[14px] font-light text-gray-600">Tailored for leadership and strategy roles, prioritizing clarity and absolute impact over styling.</p>
+               </div>
+            </div>
+
+            <div className="bg-white group cursor-pointer border border-gray-200 hover:border-[#051C2C] transition-colors p-1">
+               <div className="bg-slate-100 aspect-[3/4] relative overflow-hidden flex items-center justify-center p-6 grayscale group-hover:grayscale-0 transition-all duration-500">
+                  <div className="bg-white w-full h-full shadow-sm border-t-[8px] border-blue-900 p-6 flex flex-col justify-start">
+                     <div className="h-4 w-1/2 bg-blue-900 mb-8 text-white text-[8px] flex items-center justify-center font-bold">PROFESSIONAL</div>
+                     <div className="flex gap-4">
+                        <div className="w-1/3 border-r pr-2"><div className="h-2 w-full bg-gray-200 mb-2"></div><div className="h-2 w-3/4 bg-gray-200"></div></div>
+                        <div className="w-2/3"><div className="h-2 w-full bg-gray-300 mb-2"></div><div className="h-2 w-5/6 bg-gray-300"></div></div>
                      </div>
                   </div>
-                  <p className="text-[13px] text-slate-800 pt-1">TrustScore <strong>4.3</strong> | <strong className="underline decoration-1 underline-offset-2">1,404</strong> reviews</p>
+                  <div className="absolute inset-0 bg-[#051C2C]/0 group-hover:bg-[#051C2C]/50 transition-colors flex items-center justify-center">
+                     <OutlineDarkButton to="/register" className="opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 text-sm py-3 px-6">
+                        Preview Format
+                     </OutlineDarkButton>
+                  </div>
                </div>
+               <div className="py-6 px-4">
+                  <h3 className="font-serif text-2xl text-[#051C2C] mb-2">The Professional Strict</h3>
+                  <p className="text-[14px] font-light text-gray-600">The gold standard format for technical consulting and rigorous financial environments.</p>
+               </div>
+            </div>
 
-               <div className="flex gap-4 text-orange-400">
-                  <div className="w-6 h-6 rounded flex flex-col items-center justify-center cursor-pointer font-bold leading-none ring-2 ring-orange-300 bg-white shadow-sm hover:-translate-y-0.5 transition">in</div>
-                  <div className="w-6 h-6 rounded flex flex-col items-center justify-center cursor-pointer font-bold leading-none ring-2 ring-orange-300 bg-white shadow-sm hover:-translate-y-0.5 transition">X</div>
-                  <div className="w-6 h-6 rounded flex flex-col items-center justify-center cursor-pointer font-bold leading-none ring-2 ring-orange-300 bg-white shadow-sm hover:-translate-y-0.5 transition">ig</div>
-                  <div className="w-6 h-6 rounded flex flex-col items-center justify-center cursor-pointer font-bold leading-none ring-2 ring-orange-300 bg-white shadow-sm hover:-translate-y-0.5 transition">tk</div>
-                  <div className="w-6 h-6 rounded flex flex-col items-center justify-center cursor-pointer font-bold leading-none ring-2 ring-orange-300 bg-white shadow-sm hover:-translate-y-0.5 transition">fb</div>
+            <div className="bg-white group cursor-pointer border border-gray-200 hover:border-[#051C2C] transition-colors p-1 lg:block hidden">
+               <div className="bg-slate-100 aspect-[3/4] relative overflow-hidden flex items-center justify-center p-6 grayscale group-hover:grayscale-0 transition-all duration-500">
+                  <div className="bg-white w-full h-full shadow-sm border border-gray-200 p-8 flex flex-col justify-start items-center">
+                     <div className="h-6 w-3/4 bg-gray-800 mb-2 text-center text-white text-[9px] font-light uppercase tracking-[0.2em] flex items-center justify-center">Minimalist</div>
+                     <div className="h-px w-24 bg-gray-400 mb-8"></div>
+                     <div className="w-full text-center"><div className="h-2 w-full bg-gray-200 mx-auto mb-2"></div><div className="h-2 w-4/5 bg-gray-200 mx-auto mb-8"></div></div>
+                     <div className="w-full text-center"><div className="h-2 w-1/4 bg-slate-800 mx-auto mb-3"></div><div className="h-2 w-full bg-gray-200 mx-auto mb-2"></div></div>
+                  </div>
+                  <div className="absolute inset-0 bg-[#051C2C]/0 group-hover:bg-[#051C2C]/50 transition-colors flex items-center justify-center">
+                     <OutlineDarkButton to="/register" className="opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 text-sm py-3 px-6">
+                        Preview Format
+                     </OutlineDarkButton>
+                  </div>
+               </div>
+               <div className="py-6 px-4">
+                  <h3 className="font-serif text-2xl text-[#051C2C] mb-2">The Minimalist</h3>
+                  <p className="text-[14px] font-light text-gray-600">Extremely vast whitespace designed for creative directors and senior technical architects.</p>
+               </div>
+            </div>
+         </div>
+         
+         <div className="text-center mt-12">
+            <OutlineLightButton to="/register" className="text-sm px-10">
+               Access All Templates
+            </OutlineLightButton>
+         </div>
+      </section>
+
+      {/* Corporate Minimal Footer */}
+      <footer className="bg-white border-t border-gray-200 pt-16 pb-8">
+         <div className="max-w-[1440px] mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+            
+            {/* Logo Col */}
+            <div className="lg:col-span-1 border-b md:border-b-0 pb-8 md:pb-0">
+               <div className="flex items-center gap-2 mb-8">
+                  <span className="text-2xl font-serif text-[#051C2C]">The Resume Doctrine</span>
+               </div>
+               
+               <div className="flex gap-4">
+                  {/* Clean text social icons */}
+                  <a href="#" className="w-10 h-10 border border-gray-300 rounded-full flex items-center justify-center text-sm font-bold text-[#051C2C] hover:bg-[#051C2C] hover:text-white transition-colors">in</a>
+                  <a href="#" className="w-10 h-10 border border-gray-300 rounded-full flex items-center justify-center text-sm font-bold text-[#051C2C] hover:bg-[#051C2C] hover:text-white transition-colors">Y</a>
                </div>
             </div>
 
             {/* Links Columns */}
-            <div className="lg:col-start-3">
-               <h4 className="font-bold text-slate-900 mb-6 text-lg tracking-tight">Build Your Resume</h4>
-               <ul className="space-y-4 text-[15px] text-slate-700">
-                  <li><a href="#" className="hover:underline underline-offset-4">AI Resume Builder</a></li>
-                  <li><a href="#" className="hover:underline underline-offset-4">Basic Resume Examples</a></li>
-                  <li><a href="#" className="hover:underline underline-offset-4">How To Write a Resume</a></li>
-                  <li><a href="#" className="hover:underline underline-offset-4">Resume Builder App</a></li>
-                  <li><a href="#" className="hover:underline underline-offset-4">Cover Letter Builder</a></li>
-                  <li><a href="#" className="hover:underline underline-offset-4">Resume Examples</a></li>
-                  <li><a href="#" className="hover:underline underline-offset-4">Resume Templates</a></li>
+            <div>
+               <h4 className="text-[12px] uppercase tracking-widest text-[#051C2C] font-bold mb-6">Capabilities</h4>
+               <ul className="space-y-4 text-[14px] font-light text-gray-600">
+                  <li><Link to="/register" className="hover:text-blue-600 transition-colors">AI Document Parsing</Link></li>
+                  <li><Link to="/register" className="hover:text-blue-600 transition-colors">Formatting Engineering</Link></li>
+                  <li><Link to="/register" className="hover:text-blue-600 transition-colors">Market Intel Simulation</Link></li>
+                  <li><Link to="/register" className="hover:text-blue-600 transition-colors">Interview Architecture</Link></li>
                </ul>
             </div>
             
             <div>
-               <h4 className="font-bold text-slate-900 mb-6 text-lg tracking-tight">Career Resources</h4>
-               <ul className="space-y-4 text-[15px] text-slate-700">
-                  <li><a href="#" className="hover:underline underline-offset-4">How To Make a Resume</a></li>
-                  <li><a href="#" className="hover:underline underline-offset-4">Professional Resume Summary</a></li>
-                  <li><a href="#" className="hover:underline underline-offset-4">Best Resume Formats</a></li>
-                  <li><a href="#" className="hover:underline underline-offset-4">Best Fonts for Your Resume</a></li>
-                  <li><a href="#" className="hover:underline underline-offset-4">How To List References on a Resume</a></li>
+               <h4 className="text-[12px] uppercase tracking-widest text-[#051C2C] font-bold mb-6">Explore</h4>
+               <ul className="space-y-4 text-[14px] font-light text-gray-600">
+                  <li><Link to="/login" className="hover:text-blue-600 transition-colors">Sign In Portal</Link></li>
+                  <li><Link to="/register" className="hover:text-blue-600 transition-colors">New Registration</Link></li>
+                  <li><Link to="/" className="hover:text-blue-600 transition-colors">Global Locations</Link></li>
                </ul>
             </div>
 
             <div>
-               <h4 className="font-bold text-slate-900 mb-6 text-lg tracking-tight">About Resume Builder</h4>
-               <ul className="space-y-4 text-[15px] text-slate-700">
-                  <li><a href="#" className="hover:underline underline-offset-4">About Us</a></li>
-                  <li><a href="#" className="hover:underline underline-offset-4">Contact Us</a></li>
-                  <li><a href="#" className="hover:underline underline-offset-4">Privacy Policy</a></li>
-                  <li><a href="#" className="hover:underline underline-offset-4">Terms of Service</a></li>
-                  <li><a href="#" className="hover:underline underline-offset-4">Press</a></li>
-                  <li><a href="#" className="hover:underline underline-offset-4">Accessibility</a></li>
-                  <li><a href="#" className="hover:underline underline-offset-4">Do Not Sell or Share</a></li>
-               </ul>
+               <h4 className="text-[12px] uppercase tracking-widest text-[#051C2C] font-bold mb-6">Subscribe</h4>
+               <p className="text-[14px] font-light text-gray-600 mb-4">Select topics and stay current with our latest career insights.</p>
+               <div className="flex">
+                  <input type="text" placeholder="Email address" className="border border-gray-300 px-4 py-2 w-full text-sm outline-none focus:border-[#051C2C]" />
+                  <button className="bg-blue-600 text-white px-6 font-semibold text-sm hover:bg-blue-700 transition">Submit</button>
+               </div>
             </div>
 
          </div>
 
-         <div className="absolute right-10 bottom-24 w-12 h-12 bg-white rounded-full shadow-[0_0_15px_rgba(0,0,0,0.1)] border border-gray-100 flex items-center justify-center text-slate-700 cursor-pointer hover:bg-slate-50 transition z-50">
-            <Moon size={22} className="stroke-[1.5]" />
-         </div>
-
-         <div className="text-center text-slate-800 text-[15px] mt-10 w-full font-medium">
-            © 2026, Bold Limited. All rights reserved.
+         {/* Bottom Footer Border & Rules */}
+         <div className="max-w-[1440px] mx-auto px-6 border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-[12px] text-gray-500 font-light">
+            <div className="flex flex-wrap gap-4 md:gap-6 justify-center">
+               <a href="#" className="hover:text-gray-900 transition-colors">Scam warning</a>
+               <a href="#" className="hover:text-gray-900 transition-colors">FAQ</a>
+               <a href="#" className="hover:text-gray-900 transition-colors">Privacy policy</a>
+               <a href="#" className="hover:text-gray-900 transition-colors border-l pl-4 border-gray-300">Terms of use</a>
+               <a href="#" className="hover:text-gray-900 transition-colors border-l pl-4 border-gray-300">Accessibility statement</a>
+            </div>
+            <div>
+               © 1996-2026 The Resume Doctrine Organization
+            </div>
          </div>
       </footer>
     </div>

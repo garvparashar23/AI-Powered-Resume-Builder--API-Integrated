@@ -1,4 +1,5 @@
-require('dotenv').config();
+// [HOTFIX] Ensure latest Env vars are loaded over old terminal instances 
+require('dotenv').config({ override: true });
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -9,7 +10,8 @@ const logger = require('./utils/logger'); // [NEW] Winston logger
 
 const authRoutes = require('./routes/authRoutes');
 const resumeRoutes = require('./routes/resumeRoutes');
-const aiRoutes = require('./routes/aiRoutes');
+const aiRoutes = require('./routes/aiRoutes'); // existing openai routes
+const intelligenceRoutes = require('./routes/intelligenceRoutes'); // [NEW] Core intelligence routes
 const adminRoutes = require('./routes/adminRoutes');
 const { errorHandler } = require('./middlewares/errorHandler');
 
@@ -41,7 +43,8 @@ mongoose.connect(process.env.MONGO_URI)
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/resumes', resumeRoutes);
-app.use('/api/ai', aiRoutes);
+app.use('/api/ai/tools', aiRoutes); // shifted existing simple AI builder to /tools
+app.use('/api/ai', intelligenceRoutes); // mount new intelligence routes here
 app.use('/api/admin', adminRoutes);
 
 // Error Handler

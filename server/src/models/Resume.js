@@ -47,6 +47,25 @@ const resumeSchema = new mongoose.Schema({
     readabilityScore: { type: Number, default: 0 },
     downloads: { type: Number, default: 0 },
     lastAtsCheckJobDescription: { type: String, default: '' }
+  },
+
+  // Phase 2-4: Intelligence & Semantic Profiling
+  intelligenceContext: {
+    semanticProfile: { type: String, default: '' }, // e.g. 'Backend-focused Software Engineer'
+    primaryTone: { type: String, enum: ['modern', 'corporate', 'startup', 'research'], default: 'modern' },
+    biasCheckResults: {
+      hasBias: { type: Boolean, default: false },
+      details: { type: [String], default: [] }
+    },
+    skillGaps: { type: [String], default: [] }
+  },
+
+  // Phase 3: Recruiter Heatmap Tracking (simulated metrics)
+  heatmapTracking: {
+    experienceTimeSpentMs: { type: Number, default: 0 },
+    projectsTimeSpentMs: { type: Number, default: 0 },
+    skillsTimeSpentMs: { type: Number, default: 0 },
+    overallAttentionScore: { type: Number, default: 0 }
   }
 }, { timestamps: true });
 

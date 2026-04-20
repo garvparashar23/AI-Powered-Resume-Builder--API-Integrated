@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateField } from '../../store/resumeSlice';
-import { Plus, Trash2, Github } from 'lucide-react';
+import { Plus, Trash2, FolderGit2 as Github, Wand2 } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { API_URL } from '../../config';
@@ -57,6 +57,29 @@ export default function Projects() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const [aiLoadingIdx, setAiLoadingIdx] = useState(null);
+
+  const handleAiEnhance = async (index) => {
+     const proj = projects[index];
+     if (!proj.description) {
+        toast.error('Write a brief synopsis first for the AI to enhance!');
+        return;
+     }
+     setAiLoadingIdx(index);
+     try {
+       const res = await axios.post(`${API_URL}/ai/enhance-project`, 
+          { title: proj.title, synopsis: proj.description },
+          { headers: { Authorization: `Bearer ${user?.token || ''}` } }
+       );
+       handleChange(index, 'description', res.data.enhanced);
+       toast.success('Project details enhanced with AI!');
+     } catch (error) {
+       toast.error(error.response?.data?.message || 'Failed to enhance project');
+     } finally {
+       setAiLoadingIdx(null);
+     }
   };
 
   return (
@@ -122,13 +145,22 @@ export default function Projects() {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <div className="flex justify-between items-center mb-1">
+                   <label className="block text-sm font-medium text-gray-700">Project Synopsis</label>
+                   <button 
+                      onClick={() => handleAiEnhance(index)}
+                      disabled={aiLoadingIdx === index}
+                      className="text-xs flex items-center gap-1 font-semibold text-indigo-600 hover:text-indigo-800 transition bg-indigo-50 px-2 py-1 rounded-md"
+                   >
+                      <Wand2 size={12} /> {aiLoadingIdx === index ? 'Generating...' : 'AI Enhance into Bullet Points'}
+                   </button>
+                </div>
                 <textarea
                   value={proj.description}
                   onChange={(e) => handleChange(index, 'description', e.target.value)}
-                  rows="3"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition bg-white resize-none text-sm"
-                  placeholder="Describe the tech stack and what you built..."
+                  rows="4"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition bg-white resize-vertical text-sm leading-relaxed"
+                  placeholder="Write a rough synopsis (1-2 sentences) and let AI rewrite it into professional bullet points..."
                 />
               </div>
             </div>

@@ -1,42 +1,41 @@
+// src/plugins/nlp/biasChecker.js
+
 /**
  * Bias & Fairness Checker Plugin
- * Scans resume text for heavily gender-coded language or extreme tone imbalances.
+ * Checks for gender-coded language and tone imbalance
  */
+class BiasChecker {
+  async evaluate(resumeText) {
+    // Mock fairness evaluation
+    const textLower = resumeText.toLowerCase();
+    
+    // Simplistic mock rule based on standard gendered-language lists
+    const masculineCodedWords = ['aggressive', 'dominant', 'ninja', 'rockstar', 'competitive'];
+    const feminineCodedWords = ['supportive', 'understanding', 'compassionate', 'nurture'];
+    
+    let hasBias = false;
+    let details = [];
 
-const masculineCodedWords = ['ambitious', 'driven', 'lead', 'individual', 'competitive', 'dominant', 'force', 'expert', 'superior'];
-const feminineCodedWords = ['collaborate', 'support', 'understand', 'empathy', 'together', 'share', 'help', 'nurture', 'dependable'];
+    const foundMasc = masculineCodedWords.filter(w => textLower.includes(w));
+    const foundFem = feminineCodedWords.filter(w => textLower.includes(w));
 
-const analyzeBias = (text) => {
-  if (!text) return { isBiased: false, suggestions: [] };
+    if (foundMasc.length > 0) {
+      hasBias = true;
+      details.push(`Consider replacing masculine-coded words: ${foundMasc.join(', ')} with neutral terms.`);
+    }
 
-  const normalText = text.toLowerCase();
-  
-  let mCount = 0;
-  let fCount = 0;
+    if (foundFem.length > 0) {
+      hasBias = true;
+      details.push(`Consider replacing feminine-coded words: ${foundFem.join(', ')} with neutral terms.`);
+    }
 
-  masculineCodedWords.forEach(w => {
-    if (normalText.includes(w)) mCount++;
-  });
-  
-  feminineCodedWords.forEach(w => {
-    if (normalText.includes(w)) fCount++;
-  });
-
-  const suggestions = [];
-  
-  // Basic threshold logic for mock analysis
-  if (mCount > fCount + 3) {
-    suggestions.push("The resume uses highly authoritative/competitive language. Consider adding more collaborative keywords to balance the tone for modern inclusive workplaces.");
-  } else if (fCount > mCount + 3) {
-    suggestions.push("The resume uses highly collaborative language. Consider adding strong leadership or action-oriented keywords to highlight your direct impact and ownership.");
+    return {
+      hasBias,
+      details,
+      neutralSuggestions: hasBias ? 'Ensure language purely reflects impact, KPIs, and deliverables.' : 'No obvious bias detected.',
+      status: 'Ethical AI Resume Analyzer - Complete'
+    };
   }
+}
 
-  return {
-    mCount,
-    fCount,
-    isBiased: suggestions.length > 0,
-    suggestions
-  };
-};
-
-module.exports = { analyzeBias };
+module.exports = new BiasChecker();

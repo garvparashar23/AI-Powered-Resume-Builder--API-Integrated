@@ -1,6 +1,23 @@
 version: '3.8'
 
 services:
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=development
+      - PORT=5000
+      - MONGO_URI=mongodb://mongo:27017/ai_resume
+      - JWT_SECRET=supersecret123
+    depends_on:
+      - mongo
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+
   client:
     build:
       context: ./client
@@ -11,37 +28,16 @@ services:
       - VITE_API_URL=http://localhost:5000/api
     depends_on:
       - server
-    networks:
-      - ai-resume-network
-
-  server:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-    ports:
-      - "5000:5000"
-    environment:
-      - PORT=5000
-      - MONGO_URI=mongodb://mongo:27017/airesume
-      - JWT_SECRET=your_jwt_secret_dev
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-    depends_on:
-      - mongo
-    networks:
-      - ai-resume-network
+    volumes:
+      - ./client:/usr/src/app
+      - /usr/src/app/node_modules
 
   mongo:
-    image: mongo:6.0
+    image: mongo:latest
     ports:
       - "27017:27017"
     volumes:
-      - mongo-data:/data/db
-    networks:
-      - ai-resume-network
+      - mongo_data:/data/db
 
 volumes:
-  mongo-data:
-
-networks:
-  ai-resume-network:
-    driver: bridge
+  mongo_data:
