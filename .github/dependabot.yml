@@ -5,13 +5,13 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10
-    
+
   - package-ecosystem: "npm"
     directory: "/server"
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10
-    
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
