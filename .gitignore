@@ -26,3 +26,5 @@ yarn-error.log*
 # Logs
 logs/
 server/logs/
+mongod.log
+server/mongod.log

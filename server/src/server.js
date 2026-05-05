@@ -37,8 +37,8 @@ app.use(morgan('combined', { stream: { write: message => logger.info(message.tri
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => logger.info('MongoDB Connected'))
-  .catch(err => logger.error('MongoDB Connection Error:', err));
+  .then(() => console.log('MongoDB Connected'))
+  .catch(err => console.log('MongoDB Connection Error:', err));
 
 // Routes
 app.use('/api/auth', authRoutes);
