@@ -5,8 +5,7 @@ export default function ModernTemplate({ data }) {
         <h1 className="text-3xl font-light tracking-widest uppercase mb-1">{data?.name || 'Your Name'}</h1>
         <div className="text-[#a1b0c0] text-[11px] tracking-widest font-bold uppercase flex items-center gap-4 mt-2">
           <span>{data?.email || 'email@example.com'}</span>
-          {data?.phone && <><span className="w-px h-3 bg-slate-600"></span><span>{data.phone}</span></>}
-          {data?.location && <><span className="w-px h-3 bg-slate-600"></span><span>{data.location}</span></>}
+          {data?.jobTitle && <><span className="w-px h-3 bg-slate-600"></span><span>{data.jobTitle}</span></>}
         </div>
       </header>
 
@@ -15,7 +14,7 @@ export default function ModernTemplate({ data }) {
           {data?.summary && (
             <section>
               <h2 className="text-[12px] font-bold text-slate-800 uppercase tracking-widest mb-3 flex items-center gap-2 border-b border-gray-200 pb-2">
-                Executive Summary
+                Summary
               </h2>
               <p className="text-[13px] text-gray-700 leading-relaxed text-justify">{data.summary}</p>
             </section>

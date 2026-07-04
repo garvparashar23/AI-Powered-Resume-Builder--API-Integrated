@@ -29,6 +29,17 @@ export default function PersonalInfo() {
           />
         </div>
         <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Job Title</label>
+          <input
+            type="text"
+            name="jobTitle"
+            value={data.jobTitle || ''}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition"
+            placeholder="Software Engineer"
+          />
+        </div>
+        <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
           <input
             type="email"

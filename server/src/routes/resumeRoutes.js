@@ -6,6 +6,7 @@ const {
   createResume,
   updateResume,
   deleteResume,
+  getPublicResume
 } = require('../controllers/resumeController');
 const { protect } = require('../middlewares/authMiddleware');
 
@@ -15,5 +16,7 @@ router
   .get(protect, getResumeById)
   .put(protect, updateResume)
   .delete(protect, deleteResume);
+
+router.route('/share/:id').get(getPublicResume);
 
 module.exports = router;

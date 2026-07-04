@@ -169,6 +169,19 @@ export default function AtsScoreModal({ isOpen, onClose }) {
                   )}
                 </div>
 
+                {/* Differences & Missing Elements */}
+                {jobDescription && data.gapAnalysis && (
+                  <div className="bg-white p-6 border border-gray-200 md:col-span-2">
+                    <div className="flex items-center gap-3 border-b border-gray-100 pb-3 mb-4 text-[#051C2C]">
+                      <AlertTriangle size={18} className="text-amber-600" />
+                      <h4 className="text-[11px] font-bold uppercase tracking-widest text-[#051C2C]">Differences & Missing Elements (Job Description Analysis)</h4>
+                    </div>
+                    <div className="text-xs md:text-sm text-gray-700 space-y-2 font-light leading-relaxed whitespace-pre-line p-4 bg-slate-50 border border-gray-200">
+                      {data.gapAnalysis}
+                    </div>
+                  </div>
+                )}
+
                 {/* Weak Sections */}
                 <div className="bg-white p-6 border border-gray-200 md:col-span-2">
                   <div className="flex items-center gap-3 border-b border-gray-100 pb-3 mb-4 text-[#051C2C]">

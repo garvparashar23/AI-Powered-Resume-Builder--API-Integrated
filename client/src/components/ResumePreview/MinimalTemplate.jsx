@@ -9,7 +9,7 @@ export default function MinimalTemplate({ data }) {
         </div>
         <p className="text-[11px] text-gray-500 tracking-[0.2em] uppercase font-medium flex justify-center gap-6">
           <span>{data?.email || 'email@example.com'}</span>
-          {data?.phone && <span>{data.phone}</span>}
+          {data?.jobTitle && <span>{data.jobTitle}</span>}
         </p>
         <div className="w-full max-w-[200px] h-px bg-gray-200 mx-auto mt-8"></div>
       </div>
