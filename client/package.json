@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@hookform/resolvers": "^5.2.2",
+    "@hookform/resolvers": "^5.4.0",
     "@reduxjs/toolkit": "^2.11.2",
     "axios": "^1.15.0",
     "html2pdf.js": "^0.14.0",
