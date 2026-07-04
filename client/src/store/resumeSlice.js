@@ -10,6 +10,12 @@ const initialState = {
     projects: [],
     summary: '',
     templateId: 'modern',
+    analytics: {
+      atsScore: 0,
+      readabilityScore: 0,
+      downloads: 0,
+      lastAtsCheckJobDescription: ''
+    }
   },
   intelligenceData: {
       atsScore: null,

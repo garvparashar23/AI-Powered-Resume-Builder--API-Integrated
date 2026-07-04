@@ -66,7 +66,7 @@ export default function ResumeBuilder() {
     }
   };
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     const element = document.getElementById('resume-preview-container');
     const opt = {
       margin: 0,
@@ -76,6 +76,28 @@ export default function ResumeBuilder() {
       jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
     };
     html2pdf().set(opt).from(element).save();
+
+    // Increment downloads in database and Redux
+    const currentDownloads = currentResume.analytics?.downloads || 0;
+    const updatedAnalytics = {
+      ...(currentResume.analytics || {}),
+      downloads: currentDownloads + 1
+    };
+
+    dispatch(updateField({ field: 'analytics', value: updatedAnalytics }));
+
+    if (id) {
+      try {
+        await axios.put(`${API_URL}/resumes/${id}`, {
+          ...currentResume,
+          analytics: updatedAnalytics
+        }, {
+          headers: { Authorization: `Bearer ${user?.token || ''}` }
+        });
+      } catch (error) {
+        console.error("Failed to persist download count", error);
+      }
+    }
   };
 
   const toggleShare = () => {

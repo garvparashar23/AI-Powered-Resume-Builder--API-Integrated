@@ -276,7 +276,7 @@ export default function Home() {
                
                <div className="flex gap-4">
                   {/* Clean text social icons */}
-                  <a href="#" className="w-10 h-10 border border-gray-300 rounded-full flex items-center justify-center text-sm font-bold text-[#051C2C] hover:bg-[#051C2C] hover:text-white transition-colors">in</a>
+                  <a href="https://www.linkedin.com/in/garv-parashar/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 border border-gray-300 rounded-full flex items-center justify-center text-sm font-bold text-[#051C2C] hover:bg-[#051C2C] hover:text-white transition-colors">in</a>
                   <a href="#" className="w-10 h-10 border border-gray-300 rounded-full flex items-center justify-center text-sm font-bold text-[#051C2C] hover:bg-[#051C2C] hover:text-white transition-colors">Y</a>
                </div>
             </div>

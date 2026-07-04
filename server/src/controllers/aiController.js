@@ -25,25 +25,47 @@ const generateSummary = async (req, res) => {
     
     if (!openai) {
       logger.warn('OpenAI API Key missing, returning mock summary.');
-      let mockResponse = `As a highly motivated and skilled ${role || 'professional'}, I possess a strong background in software development and project management. Experienced in building scalable applications and finding innovative solutions to complex problems. (Mocking Tone: ${tone})`;
+      let mockResponse = `Results-driven ${role || 'Professional'} with a proven track record of designing and delivering high-impact system architectures. Skilled in leveraging cutting-edge methodologies to enhance scalability, streamline performance, and maximize organizational efficiency.`;
       await new Promise(resolve => setTimeout(resolve, 1500));
       return res.json({ summary: mockResponse });
     }
 
     const backgroundDetails = { skills, experience, education };
-    const basePrompt = `Generate a professional summary for a ${role} with the following background details: ${JSON.stringify(backgroundDetails)}. Keep it under 4 sentences.`;
+    const basePrompt = `Generate a professional, results-oriented summary for a ${role} with the following background details: ${JSON.stringify(backgroundDetails)}. Keep it precise and small, strictly 2 to 3 sentences, written in a high-impact corporate tone. Return ONLY the raw copy-pasteable summary text itself. Do NOT include any conversational introduction, preambles (such as "Here's a professionally designed summary..."), explanation, quotes, or markdown wrappers.`;
     const finalPrompt = buildEnhancedPrompt(basePrompt, tone);
 
     const completion = await openai.chat.completions.create({
-      messages: [{ role: "system", content: "You are an expert tech recruiter and resume writer." }, { role: "user", content: finalPrompt }],
+      messages: [
+        { role: "system", content: "You are a strict technical recruiter and professional resume writer. Your job is to output ONLY the raw summary text without any conversational preamble, introduction, quotes, or surrounding explanation. Output must be exactly 2-3 sentences, using active corporate verbs." }, 
+        { role: "user", content: finalPrompt }
+      ],
       model: "llama-3.1-8b-instant",
     });
 
-    res.json({ summary: completion.choices[0].message.content });
+    let summaryText = completion.choices[0].message.content.trim();
+    // Strip leading/trailing quotation marks if the LLM output wrapped it in quotes
+    summaryText = summaryText.replace(/^["']|["']$/g, '');
+    // Strip common preambles if present
+    summaryText = summaryText.replace(/^(Here's|Here is) a (professionally designed|professional|corporate) summary.*:\s*/i, '');
+
+    res.json({ summary: summaryText.trim() });
   } catch (error) {
     logger.error('Error generating summary:', error);
     res.status(500).json({ message: 'Error generating summary' });
   }
+};
+
+const generateLocalGapAnalysis = (missingKeywords) => {
+  if (!missingKeywords || missingKeywords.length === 0) {
+    return "• No significant skill gaps or credential differences identified between the resume and job description.";
+  }
+  
+  const bulletPoints = [];
+  bulletPoints.push(`• Critical competency gap: The resume lacks direct references to target requirements like ${missingKeywords.slice(0, 3).map(kw => kw.toUpperCase()).join(', ')}.`);
+  bulletPoints.push(`• Technical mismatch: Core tools and environments specified in the job description are not fully integrated or highlighted in your current experience bullet points.`);
+  bulletPoints.push(`• Recommended adjustment: Explicitly document hands-on project work or roles involving these target technical competencies to improve automatic ATS routing alignment.`);
+  
+  return bulletPoints.join('\n');
 };
 
 const checkAtsScore = async (req, res) => {
@@ -112,11 +134,31 @@ const checkAtsScore = async (req, res) => {
 
     // Phase 1: Natural Language ATS Check against Job Description
     let finalScore = structuralScore;
-    let atsResult = { matchedKeywords: [], missingKeywords: [], keywordDensity: 0 };
+    let atsResult = { matchedKeywords: [], missingKeywords: [], keywordDensity: 0, gapAnalysis: '' };
 
     if (jobDescription) {
        atsResult = calculateATSScore(corpusText, jobDescription);
        finalScore = Math.round((structuralScore * 0.5) + (atsResult.score * 0.5));
+       
+       if (openai) {
+          try {
+             const systemPrompt = "You are a professional recruiting evaluator. Compare the resume text with the job description. Identify specific differences (e.g. gaps in experience levels, credentials, tools) and missing things (e.g. specific skills, certifications, practices). Be concise, precise, and professional. Return your analysis in plain text as 3-4 bullet points (use standard bullet character •). Do not write any introduction.";
+             const userPrompt = `Job Description:\n${jobDescription}\n\nResume Text:\n${corpusText}`;
+             const completion = await openai.chat.completions.create({
+                messages: [
+                   { role: 'system', content: systemPrompt },
+                   { role: 'user', content: userPrompt }
+                ],
+                model: 'llama-3.1-8b-instant'
+             });
+             atsResult.gapAnalysis = completion.choices[0].message.content.trim();
+          } catch (err) {
+             logger.error("Failed to generate AI gap analysis:", err);
+             atsResult.gapAnalysis = generateLocalGapAnalysis(atsResult.missingKeywords);
+          }
+       } else {
+          atsResult.gapAnalysis = generateLocalGapAnalysis(atsResult.missingKeywords);
+       }
     }
 
     // Phase 3: Recruiter Engines & Bias Checkers
@@ -140,7 +182,8 @@ const checkAtsScore = async (req, res) => {
       matchedKeywords: atsResult.matchedKeywords,
       keywordDensity: atsResult.keywordDensity,
       biasReport,
-      recruiterHeatmap: recruiterMap.heatMap
+      recruiterHeatmap: recruiterMap.heatMap,
+      gapAnalysis: atsResult.gapAnalysis || ""
     });
 
   } catch (error) {

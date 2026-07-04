@@ -11,7 +11,11 @@ const analyzeGithubProfile = async (username) => {
   try {
     // Fetch public repos from GitHub API
     // Using a sort by 'updated' and taking top 5 to keep the resume relevant
-    const response = await axios.get(`https://api.github.com/users/${username}/repos?sort=updated&per_page=5`);
+    const response = await axios.get(`https://api.github.com/users/${username}/repos?sort=updated&per_page=5`, {
+      headers: {
+        'User-Agent': 'Resume-Doctrine-App'
+      }
+    });
     const repos = response.data;
 
     // Transform into resume-friendly objects

@@ -5,15 +5,14 @@ export default function ProfessionalTemplate({ data }) {
         <h1 className="text-4xl font-extrabold uppercase tracking-widest mb-1 text-[#051C2C]">{data?.name || 'Your Name'}</h1>
         <div className="text-xs font-sans font-bold text-gray-600 flex items-center gap-4 uppercase tracking-[0.2em] mt-3">
           <span>{data?.email || 'email@example.com'}</span>
-          {data?.phone && <><span className="w-1 h-1 bg-blue-900 rounded-full"></span><span>{data.phone}</span></>}
-          {data?.location && <><span className="w-1 h-1 bg-blue-900 rounded-full"></span><span>{data.location}</span></>}
+          {data?.jobTitle && <><span className="w-1 h-1 bg-blue-900 rounded-full"></span><span>{data.jobTitle}</span></>}
         </div>
       </header>
 
       {data?.summary && (
         <section className="mb-6">
            <h2 className="text-xs font-sans font-bold text-white bg-[#051C2C] uppercase tracking-widest px-3 py-1 inline-block mb-3">
-            Professional Summary
+            Summary
           </h2>
           <p className="text-[13px] leading-relaxed text-justify mb-2">{data.summary}</p>
         </section>
